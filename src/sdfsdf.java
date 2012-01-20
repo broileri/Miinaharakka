@@ -9,4 +9,5 @@
  */
 public class sdfsdf {
     int asdklasd = 3;
+    String moi = "moi";
 }
