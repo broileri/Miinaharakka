@@ -1,3 +1,5 @@
 /.svn/
 /nbproject/.svn/
 /src/.svn/
+/nbproject/private/
+/build/

@@ -6,29 +6,47 @@ import java.util.*;
 
 public class Kayttoliittyma extends JFrame {
 
-    // Napit
-    private JButton lippu, kysymys;
+    // Napit ja muut
+    private JButton lippu, kysymys, iso, pieni, normi;
     private JButton reset;
     private HashMap<String, JButton> napukat;
+    private int pelinKoko;
 
     // Alkutila
     public Kayttoliittyma() {
         
-        lippu = new JButton("|>");
-        kysymys = new JButton("?");
+        reset = new JButton("reset");
+        pieni = new JButton("S");
+        normi = new JButton("M");
+        iso = new JButton("L");        
         napukat = new HashMap<String, JButton>();
+        pelinKoko = 9;
         
-        // Napujen lisäys
-        JPanel paneeli = new JPanel(new GridLayout(10, 10));
-        teeNappeja(100);
+        teePeliruutu();
+    }
+    
+        // Pelialueen piirto
+        private void teePeliruutu() {
+            
+        // Yläpaneelin lisäys
+        JPanel ylapaneeli = new JPanel(new FlowLayout());
+        ylapaneeli.add(pieni); ylapaneeli.add(normi); ylapaneeli.add(iso);
+        ylapaneeli.add(reset);
+        
+        
+        
+        // Ruudukon lisäys
+        JPanel ruudukkopaneeli = new JPanel(new GridLayout(pelinKoko, pelinKoko));
+        teeNappeja(pelinKoko*pelinKoko);
         
         for (int i = 0; i < napukat.size(); i++) {
             String avain = Integer.toString(i);
-            paneeli.add(napukat.get(avain));
+            ruudukkopaneeli.add(napukat.get(avain));
         }
 
         this.setLayout(new BorderLayout());
-        this.add("Center", paneeli);
+        this.add("Center", ruudukkopaneeli);
+        this.add("North", ylapaneeli);
     }
     
     // Tekee annetun määrän ruutuja HashMapiin
@@ -41,15 +59,5 @@ public class Kayttoliittyma extends JFrame {
             nappula = new JButton(" ");
             napukat.put(avain, nappula);
         }
-    }
-
-    //Startti
-    public static void main(String[] args) {
-
-        Kayttoliittyma harava = new Kayttoliittyma();
-        harava.setTitle("Miinaharava");
-        harava.pack();
-        harava.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); // osaa loppua
-        harava.setVisible(true); // olio näkyviin
     }
 }
