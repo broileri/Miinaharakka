@@ -6,18 +6,18 @@ import javax.swing.*;
 
 public class Ajastin extends JFrame implements ActionListener {
 
-    private JTextField ajastinkentta;
+    private JTextField aikakentta;
     private Timer ajastin = new Timer(1000, this);
     int sekunnit = 1;
     boolean lopetus = false;
 
-    public Ajastin() {
+    public Ajastin(JPanel paneeli) {
 
-        ajastinkentta = new JTextField();
-        ajastinkentta.setEditable(false);
-        this.add(ajastinkentta);
-        this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);        
-        this.setVisible(true);
+        // Kentän rakentaminen
+        aikakentta = new JTextField();
+        aikakentta.setEditable(false);
+        paneeli.add(aikakentta);        
+        aikakentta.setColumns(4);       
 
         ajastin.start();
     }
@@ -26,14 +26,11 @@ public class Ajastin extends JFrame implements ActionListener {
     @Override
     public void actionPerformed(ActionEvent e) {
         if (!lopetus) {            
-            ajastinkentta.setText(Integer.toString(sekunnit));            
+            aikakentta.setText(Integer.toString(sekunnit));            
             sekunnit = sekunnit + 1;
         } else {
             ajastin.stop();
+            lopetus = false;
         }
-    }
-
-    public static void main(String[] args) {
-        Ajastin display = new Ajastin();
     }
 }
