@@ -10,7 +10,7 @@ public class Main extends Kayttoliittyma {
     public static void main(String[] args) {
 
         Kayttoliittyma harava = new Kayttoliittyma();
-        harava.setTitle("Miinaharava");
+        harava.setTitle("Miinaharakka");
         harava.pack();
         harava.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); // osaa loppua
         harava.setVisible(true); // olio näkyviin
