@@ -19,9 +19,9 @@ public class Kayttoliittyma extends JFrame {
         
         // Lintuikonit
         ImageIcon harakka =  new ImageIcon( getClass().getResource("miinaharakka.png") );
-        ImageIcon hkummastus = new ImageIcon( getClass().getResource("miinaharakka.png") );
-        ImageIcon hvoitto = new ImageIcon( getClass().getResource("miinaharakka.png") );
-        ImageIcon hkuolema = new ImageIcon( getClass().getResource("miinaharakka.png") );       
+        ImageIcon hkummastus = new ImageIcon( getClass().getResource("miinaharakkaiik.png") );
+        ImageIcon hvoitto = new ImageIcon( getClass().getResource("miinaharakkajee.png") );
+        ImageIcon hkuolema = new ImageIcon( getClass().getResource("miinaharakkakuol.png") );       
         
         reset = new JButton(harakka);
         pieni = new JButton("S");        
