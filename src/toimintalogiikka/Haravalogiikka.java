@@ -116,6 +116,11 @@ public class Haravalogiikka {
     public int[][] getRuudukko() {
         return miinakentta;
     }
+    
+    // Etsii, mitkä ruudut paljastetaan
+    public void paljastaTyhjatJaNumerot() {
+        
+    }
    
     
     // Testimetodi ohjelmoinnin helpottamiseksi
