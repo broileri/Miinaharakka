@@ -2,9 +2,7 @@ package grafiikat;
 
 import javax.swing.*;
 import java.awt.*;
-
 import java.util.*;
-
 
 public class Kayttoliittyma extends JFrame {
 
@@ -18,10 +16,10 @@ public class Kayttoliittyma extends JFrame {
     public Kayttoliittyma() {
         
         // Lintuikonit
-        ImageIcon harakka =  new ImageIcon( getClass().getResource("miinaharakka.png") );
-        ImageIcon hkummastus = new ImageIcon( getClass().getResource("miinaharakkaiik.png") );
-        ImageIcon hvoitto = new ImageIcon( getClass().getResource("miinaharakkajee.png") );
-        ImageIcon hkuolema = new ImageIcon( getClass().getResource("miinaharakkakuol.png") );       
+        ImageIcon harakka =  new ImageIcon( getClass().getResource("Kuvat/miinaharakka.png") );
+        ImageIcon hkummastus = new ImageIcon( getClass().getResource("Kuvat/miinaharakkaiik.png") );
+        ImageIcon hvoitto = new ImageIcon( getClass().getResource("Kuvat/miinaharakkajee.png") );
+        ImageIcon hkuolema = new ImageIcon( getClass().getResource("Kuvat/miinaharakkakuol.png") );       
         
         reset = new JButton(harakka);
         pieni = new JButton("S");        
@@ -41,8 +39,7 @@ public class Kayttoliittyma extends JFrame {
         ylapaneeli.add(normi);
         ylapaneeli.add(iso);
         aika = new Ajastin(ylapaneeli);
-        ylapaneeli.add(reset);
-        //ylapaneeli.add(lintu);
+        ylapaneeli.add(reset);        
         
 
         // Nappularuudukon lisäys
@@ -53,16 +50,13 @@ public class Kayttoliittyma extends JFrame {
             ruudukkopaneeli.add(napukat.get(avain));
         }
 
-        // Paneelien lisääminen pelikenttään
-        
+        // Paneelien lisääminen pelikenttään        
         this.setLayout(new BorderLayout(10, 10));
         this.add("Center", ruudukkopaneeli);
         this.add("North", ylapaneeli);
         this.setBounds(300, 300, 200, 200);
         this.setResizable(false);
         this.setVisible(true);
-       
-
     }
 
     // Tekee annetun määrän ruutuja HashMapiin

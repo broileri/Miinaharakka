@@ -12,8 +12,8 @@ public class Main extends Kayttoliittyma {
         Kayttoliittyma harava = new Kayttoliittyma();
         harava.setTitle("Miinaharakka");
         harava.pack();
-        harava.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); // osaa loppua
-        harava.setVisible(true); // olio näkyviin
+        harava.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); // Osaa loppua
+        harava.setVisible(true); // Olio näkyviin
     }
     
 }

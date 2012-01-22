@@ -10,7 +10,7 @@ public class Haravalogiikka {
 
     public Haravalogiikka(int koko) {
         luoRuudukko(koko);
-        laitaMiinatRuudukkoon(koko);
+        laitaMiinatRuudukkoon(koko, maaritaMiinamaara(koko));
         laitaNumerotRuudukkoon();
     }
 
@@ -26,10 +26,9 @@ public class Haravalogiikka {
         }
     }
 
-    // Laskee miinamäärän, laittaa miinat ruudukkoon ja tallentaa niiden sijainnin
-    private void laitaMiinatRuudukkoon(int koko) {        
+    // Määrittää oikean miinamäärän ruudukon kokoon perustuen
+    private int maaritaMiinamaara(int koko) {
         
-        // Miinamäärä
         int miinamaara;
 
         if (koko == 9) {
@@ -39,6 +38,11 @@ public class Haravalogiikka {
         } else {
             miinamaara = 99;
         }
+        return miinamaara;
+    }
+    
+    // Laittaa miinat ruudukkoon ja tallentaa niiden sijainnin
+    private void laitaMiinatRuudukkoon(int koko, int miinamaara) {         
         
         miinatX = new int[miinamaara];
         miinatY = new int[miinamaara];
@@ -108,9 +112,13 @@ public class Haravalogiikka {
         }
         return false;
     }
+    
+    public int[][] getRuudukko() {
+        return miinakentta;
+    }
    
     
-    // Testimetodi, jolla voi kokeilla, onko ruudukko oikeanlainen
+    // Testimetodi ohjelmoinnin helpottamiseksi
     private void testaaRuudukkoa() {
         
         // Miltä ruudukko näyttää
@@ -148,6 +156,4 @@ public class Haravalogiikka {
         Haravalogiikka testaus = new Haravalogiikka(9);
         testaus.testaaRuudukkoa();
     }
-      
-    
 }
