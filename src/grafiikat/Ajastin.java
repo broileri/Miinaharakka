@@ -30,6 +30,7 @@ public class Ajastin extends JFrame implements ActionListener {
     
     public void resetoi() {
         sekunnit = 1;
+        aikakentta.setText("0");
     }
     
     public void aloita() {

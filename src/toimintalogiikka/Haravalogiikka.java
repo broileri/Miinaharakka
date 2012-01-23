@@ -1,5 +1,4 @@
 package toimintalogiikka;
-
 import java.util.LinkedList;
 import java.util.Queue;
 import java.util.Random;
@@ -118,6 +117,22 @@ public class Haravalogiikka {
     public int[][] getRuudukko() {
         return miinakentta;
     }
+    
+    // Suorittaa operaatioita avatun ruudun tyypistä riippuen
+    public void ruutuAuki(int x, int y) {
+       // Jos tyhjä tai numero
+        etsiTyhjat(new Ruutu(x, y));        
+        
+        // Jos miina
+        
+        // KABOOM!!!
+       
+    }
+    
+    // Avaa aukaistun tyhjän alueen reunoille numerot näkyviin
+    public void avaaTyhjienReunat() {
+       // Tyhjältä näyttää :P 
+    }
 
     // Jos annettu ruutu on tyhjä, merkitsee sen ja sitä ympäröivät tyhjät
     // ruudut 9:llä. Flood-fill.
@@ -158,7 +173,7 @@ public class Haravalogiikka {
     }
 
     // Testimetodi ohjelmoinnin helpottamiseksi
-    private void testaaRuudukkoa() {
+    public void testaaRuudukkoa() {
 
         // Miltä ruudukko näyttää
         String testi = "";
@@ -191,8 +206,11 @@ public class Haravalogiikka {
         System.out.println("True: " + onkoRuudukossa(0, 8));
     }
 
+    /*
     public static void main(String[] args) {
         Haravalogiikka testaus = new Haravalogiikka(9);
         testaus.testaaRuudukkoa();
     }
+    * 
+    */
 }
