@@ -19,7 +19,7 @@ public class LogiikkaGUIhin extends Kayttoliittyma {
         Kayttoliittyma testi = new Kayttoliittyma();
         Haravalogiikka testi2 = new Haravalogiikka(9);
         testi2.testaaRuudukkoa();
-        testi2.etsiTyhjat(new Ruutu(1, 1));
+        testi2.etsiTyhjat(testi2.getRuudukko(), new Ruutu(1, 1));
         testi2.testaaRuudukkoa();        
     }
 }

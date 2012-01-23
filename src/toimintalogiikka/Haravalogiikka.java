@@ -104,7 +104,7 @@ public class Haravalogiikka {
         }
     }
 
-    // Tutkii, onko ruudukossa kohtaa [x, y]
+    // Tutkii, onko ruudukossa kohtaa (x, y)
     public boolean onkoRuudukossa(int x, int y) {
 
         if (x <= (miinakentta.length - 1) && y <= (miinakentta.length - 1)
@@ -118,14 +118,23 @@ public class Haravalogiikka {
         return miinakentta;
     }
     
+    public int[] getTyhjatX() {
+        return tyhjatX;
+    }
+    
+    public int[] getTyhjatY() {
+        return tyhjatY;
+    }
+    
     // Suorittaa operaatioita avatun ruudun tyypistä riippuen
     public void ruutuAuki(int x, int y) {
+        
        // Jos tyhjä tai numero
-        etsiTyhjat(new Ruutu(x, y));        
+        etsiTyhjat(miinakentta, new Ruutu(x, y));        
         
         // Jos miina
         
-        // KABOOM!!!
+        // KABOOM!!! Joo, tähän vähän jotain vielä. :P
        
     }
     
@@ -136,7 +145,7 @@ public class Haravalogiikka {
 
     // Jos annettu ruutu on tyhjä, merkitsee sen ja sitä ympäröivät tyhjät
     // ruudut 9:llä. Flood-fill.
-    public void etsiTyhjat(Ruutu r) {
+    public void etsiTyhjat(int[][] miinakentta, Ruutu r) {
 
         int index = 0, koko = miinakentta.length;
         tyhjatX = new int[koko];

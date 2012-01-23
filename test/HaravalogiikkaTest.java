@@ -1,7 +1,9 @@
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 import org.junit.*;
-import static org.junit.Assert.*;
 import toimintalogiikka.Haravalogiikka;
+import toimintalogiikka.Ruutu;
 
 public class HaravalogiikkaTest {
 
@@ -24,12 +26,42 @@ public class HaravalogiikkaTest {
         haravapieni = new Haravalogiikka(9);
         haravanormi = new Haravalogiikka(16);
         haravasuuri = new Haravalogiikka(22);
-
     }
 
     @After
     public void tearDown() {
     }
+    
+    @Test
+    public void avautuukoTyhjiaOikein() {
+        int[][] testi = new int[9][9];
+        boolean totta = true;
+        
+        // matriisi täyteen nollia
+        for (int i = 0; i < testi.length; i++) {
+            for (int j = 0; j < testi.length; j++) {
+                testi[i][j] = 0;
+            }
+        }        
+        // testi-matriisin kolmanneksi ylin rivi -1:iä täyteen
+        for (int i = 0; i < testi.length; i++) {
+            testi[2][i] = -1;
+        }
+        // "Klikataan" ~keskelle toisiksi ylintä riviä
+        haravapieni.etsiTyhjat(testi, new Ruutu(1, 5));
+        
+        // Jos kahdelta ensimmäiseltä riviltä löytyy jokin muu arvo kuin 9,
+        // totta saa arvon false ja testi feilaa
+        for (int i = 0; i < testi.length; i++) {
+          if (testi[0][i] != 9 || testi[1][i] != 9) {
+              System.out.println(testi[0][i] + " " + testi[1][i]);
+              totta = false;
+          }  
+        }
+        assertTrue(totta);
+    }
+    
+    
     
     @Test
     public void oikeanKokoinenRuudukkoS() {
