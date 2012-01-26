@@ -180,6 +180,8 @@ public class Haravalogiikka {
         }
 
     }
+    
+    
 
     // Testimetodi ohjelmoinnin helpottamiseksi
     public void testaaRuudukkoa() {

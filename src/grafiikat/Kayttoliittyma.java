@@ -4,7 +4,10 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.util.*;
+import toimintalogiikka.Haravalogiikka;
 
 public class Kayttoliittyma extends JFrame {
 
@@ -13,23 +16,31 @@ public class Kayttoliittyma extends JFrame {
     private HashMap<String, JButton> napukat;
     private int pelinKoko;
     private Ajastin aika;
-    private ImageIcon harakka, hkummastus, hvoitto, hkuolema;
+    private ImageIcon harakka, hkummastus, hvoitto, hkuolema, miina, lippu, kysymys;
+    private Haravalogiikka logiikka;
 
     // Alkutila
     public Kayttoliittyma() {
 
-        // Lintuikonit
-        harakka = new ImageIcon(getClass().getResource("Kuvat/miinaharakka.png"));
+        // Nappi-ikonit
+        harakka = new ImageIcon(getClass().getResource("Kuvat/miinaharakka.png"));        
         hkummastus = new ImageIcon(getClass().getResource("Kuvat/miinaharakkaiik.png"));
         hvoitto = new ImageIcon(getClass().getResource("Kuvat/miinaharakkajee.png"));
         hkuolema = new ImageIcon(getClass().getResource("Kuvat/miinaharakkakuol.png"));
+        miina = new ImageIcon(getClass().getResource("Kuvat/miina.png"));
+        lippu = new ImageIcon(getClass().getResource("Kuvat/lippu.png"));
+        // kysymys =
 
         // Nappulat
         reset = new JButton(harakka);
         reset.setPressedIcon(hkummastus);
+        reset.setFocusPainted(false);
         pieni = new JButton("S");
+        pieni.setFocusPainted(false);
         normi = new JButton("M");
+        normi.setFocusPainted(false);
         iso = new JButton("L");
+        iso.setFocusPainted(false);
         napukat = new HashMap<String, JButton>();
         pelinKoko = 9;
 
@@ -37,47 +48,73 @@ public class Kayttoliittyma extends JFrame {
         tapahtumakuuntelijatValikolle();
 
         // Peli-ikkunan luonti
-        teePeliIkkuna();
-
-        // Tapahtumakuuntelijat ruudukon napeille 
-        tapahtumakuuntelijatRuudukolle();
+        aloitaPeli();
 
         // Asetukset
         this.setTitle("Miinaharakka"); // Otsikko \o/        
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); // Osaa loppua
         this.setVisible(true); // Olio näkyviin
-        this.pack(); // Tekee ikkunasta sopivan kokoisen
-
     }
-    // Kun peli läpi, kutsutaan tätä
 
+    private void aloitaPeli() {
+
+        teePeliIkkuna();
+        this.pack();
+
+        for (int i = 0; i < pelinKoko * pelinKoko; i++) {
+            hiirikuuntelijatRuudukolle(i);
+        }
+        logiikka = new Haravalogiikka(pelinKoko);
+    }
+
+    // Kun peli läpi, kutsutaan tätä
     public void voittoKotiin() {
         reset.setIcon(hvoitto);
         aika.seis();
         // Lisää kentän paljastus tähän
     }
-    // Kun peli meni mönkään, kutsutaan tätä
 
+    // Kun peli meni mönkään, kutsutaan tätä
     public void kirvelevaTappio() {
         reset.setIcon(hkuolema);
         aika.seis();
         // Lisää kentän paljastus tähän
     }
 
+    private void asetaKuvaAvattuun(int indeksi) {
+        int[][] miinakentta = logiikka.getRuudukko();
+        
+        
+        // toteuta indeksin mukainen kuvahaku
+        
+        
+        
+    }
+
     // Ruudukolle kuuntelijat
-    private void tapahtumakuuntelijatRuudukolle() {
+    private void hiirikuuntelijatRuudukolle(final int indeksi) {
 
-        for (int i = 0; i < pelinKoko * pelinKoko; i++) {
-            napukat.get(Integer.toString(i)).addActionListener(
-                    new ActionListener() {
 
-                        @Override
-                        public void actionPerformed(ActionEvent tapahtuma) {
-                            // Jotain fiksua tänne :P
-                        }
-                    });
-        }
+        napukat.get(Integer.toString(indeksi)).addMouseListener(new MouseAdapter() {
 
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                if (e.getButton() == MouseEvent.BUTTON1 && 
+                        napukat.get(Integer.toString(indeksi)).getIcon() == lippu) {
+                    napukat.get(Integer.toString(indeksi)).setIcon(null);
+                    napukat.get(Integer.toString(indeksi)).setEnabled(false);
+                    asetaKuvaAvattuun(indeksi);
+                }
+                
+                else if (e.getButton() == MouseEvent.BUTTON1) {
+                    napukat.get(Integer.toString(indeksi)).setEnabled(false);
+                    asetaKuvaAvattuun(indeksi);
+                } else if (e.getButton() == MouseEvent.BUTTON3) {
+                    napukat.get(Integer.toString(indeksi)).setIcon(lippu);
+                }
+
+            }
+        });
     }
 
     // Menu-napukoille kuuntelijat
@@ -171,9 +208,16 @@ public class Kayttoliittyma extends JFrame {
 
         for (int i = 0; i < lkm; i++) {
             avain = Integer.toString(i);
-            nappula = new JButton(" ");
+            nappula = new JButton();
+            nappula.setPreferredSize(new Dimension(40, 40));               
+            nappula.setFocusPainted(false);
             napukat.put(avain, nappula);
         }
+    }
+    
+    // Antaa pelinKoon
+    public int getPelinKoko() {
+        return pelinKoko;
     }
 
     // Antaa napit
