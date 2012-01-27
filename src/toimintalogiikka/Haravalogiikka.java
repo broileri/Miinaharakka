@@ -4,15 +4,17 @@ import java.util.Queue;
 import java.util.Random;
 
 public class Haravalogiikka {
-
+   
     private int[][] miinakentta;
     private int[] miinatX, miinatY;
-    private int[] tyhjatX, tyhjatY;
+    private int[] tyhjatY, tyhjatX;
+    
 
     public Haravalogiikka(int koko) {
         luoRuudukko(koko);
         laitaMiinatRuudukkoon(koko, maaritaMiinamaara(koko));
         laitaNumerotRuudukkoon();
+        testaaRuudukkoa();
     }
 
     // Luo uuden ruudukon ja täyttää sen tyhjillä ruuduilla
@@ -124,32 +126,22 @@ public class Haravalogiikka {
     
     public int[] getTyhjatY() {
         return tyhjatY;
-    }
-    
-    // Suorittaa operaatioita avatun ruudun tyypistä riippuen
-    public void ruutuAuki(int x, int y) {
-        
-       // Jos tyhjä tai numero
-        etsiTyhjat(miinakentta, new Ruutu(x, y));        
-        
-        // Jos miina
-        
-        // KABOOM!!! Joo, tähän vähän jotain vielä. :P
-       
-    }
-    
-    // Avaa aukaistun tyhjän alueen reunoille numerot näkyviin
-    public void avaaTyhjienReunat() {
-       // Tyhjältä näyttää :P 
-    }
+    }    
+   
 
     // Jos annettu ruutu on tyhjä, merkitsee sen ja sitä ympäröivät tyhjät
     // ruudut 9:llä. Flood-fill.
     public void etsiTyhjat(int[][] miinakentta, Ruutu r) {
 
-        int index = 0, koko = miinakentta.length;
-        tyhjatX = new int[koko];
-        tyhjatY = new int[koko];
+        int index = 0, koko = miinakentta.length-1;
+        tyhjatX = new int[koko*koko];
+        tyhjatY = new int[koko*koko];
+        
+        for (int i = 0; i < tyhjatX.length; i++) {
+            tyhjatX[i] = -9;
+            tyhjatY[i] = -9;
+        }
+        
         Queue<Ruutu> jono = new LinkedList<Ruutu>();
         jono.add(r);
 
@@ -162,7 +154,8 @@ public class Haravalogiikka {
 
                 // Avattavien tallennus
                 tyhjatX[index] = x;
-                tyhjatY[index] = y;
+                tyhjatY[index] = y;                 
+                index++;
 
                 if (onkoRuudukossa(x, y - 1)) {
                     jono.add(new Ruutu(x, y - 1));
@@ -178,10 +171,7 @@ public class Haravalogiikka {
                 }
             }
         }
-
     }
-    
-    
 
     // Testimetodi ohjelmoinnin helpottamiseksi
     public void testaaRuudukkoa() {
@@ -216,12 +206,4 @@ public class Haravalogiikka {
         System.out.println("True: " + onkoRuudukossa(8, 0));
         System.out.println("True: " + onkoRuudukossa(0, 8));
     }
-
-    /*
-    public static void main(String[] args) {
-        Haravalogiikka testaus = new Haravalogiikka(9);
-        testaus.testaaRuudukkoa();
-    }
-    * 
-    */
 }
