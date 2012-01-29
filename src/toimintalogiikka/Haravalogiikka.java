@@ -161,14 +161,27 @@ public class Haravalogiikka {
         return false;
     }
 
+    /**
+     * Palauttaa tämänhetkisen miinakenttäruudukon, jossa
+     * miinojen, tyhjien, avattujen ja numeroruutujen sijainnit.
+     * @return 
+     */
     public int[][] getRuudukko() {
         return miinakentta;
     }
     
+    /**
+     * Palauttaa tyhjien ruutujen x-koordinaatit.
+     * @return 
+     */
     public int[] getTyhjatX() {
         return tyhjatX;
     }
     
+    /**
+     * Palauttaa tyhjien ruutujen y-koordinaatit.
+     * @return 
+     */
     public int[] getTyhjatY() {
         return tyhjatY;
     }    
