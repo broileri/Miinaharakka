@@ -3,6 +3,11 @@ import java.util.LinkedList;
 import java.util.Queue;
 import java.util.Random;
 
+/**
+ * Luokka luo sijainnit pelikentällä oleville miinoille, numeroille ja tyhjille
+ * ruuduille.
+ * @author Broileri
+ */
 public class Haravalogiikka {
    
     private int[][] miinakentta;
@@ -10,6 +15,16 @@ public class Haravalogiikka {
     private int[] tyhjatY, tyhjatX;
     
 
+    /**
+     * Luo uudet pelisijainnit.
+     * 
+     * @param koko Annettu koko, joka on 9, 16 tai 22.
+     * 
+     * @see toimintalogiikka.Haravalogiikka#luoRuudukko(int)
+     * @see toimintalogiikka.Haravalogiikka#laitaMiinatRuudukkoon(int, maaritaMiinamaara(int))
+     * @see toimintalogiikka.Haravalogiikka#laitaNumerotRuudukkoon()
+     * @see toimintalogiikka.Haravalogiikka#maaritaMiinamaara(int)
+     */
     public Haravalogiikka(int koko) {
         luoRuudukko(koko);
         laitaMiinatRuudukkoon(koko, maaritaMiinamaara(koko));
@@ -17,7 +32,13 @@ public class Haravalogiikka {
         testaaRuudukkoa();
     }
 
-    // Luo uuden ruudukon ja täyttää sen tyhjillä ruuduilla
+    
+    /**
+     * Luo uuden halutun kokoisen ruudukon ja täyttää sen nollilla. Nolla
+     * tarkoittaa tyhjää ruutua.
+     * 
+     * @param koko Pelialueen sivun pituus.
+     */
     private void luoRuudukko(int koko) {
 
         miinakentta = new int[koko][koko];
@@ -29,7 +50,13 @@ public class Haravalogiikka {
         }
     }
 
-    // Määrittää oikean miinamäärän ruudukon kokoon perustuen
+    /**
+     * Määrittää miinojen lukumäärän ruudukon kokoon perustuen.
+     * 
+     * @param koko Ruudukon sivun pituus.
+     * 
+     * @return Miinojen lukumäärä.
+     */
     private int maaritaMiinamaara(int koko) {
 
         int miinamaara;
@@ -44,7 +71,13 @@ public class Haravalogiikka {
         return miinamaara;
     }
 
-    // Laittaa miinat ruudukkoon ja tallentaa niiden sijainnin
+    /**
+     * Laittaa miinoja ruudukkoon sattumanvaraisiin kohtiin
+     * ja tallettaa miinojen sijainnit.
+     * 
+     * @param koko Ruudukon sivun pituus.
+     * @param miinamaara Miinojen lukumäärä.
+     */
     private void laitaMiinatRuudukkoon(int koko, int miinamaara) {
 
         miinatX = new int[miinamaara];
@@ -68,7 +101,13 @@ public class Haravalogiikka {
         }
     }
 
-    // Ympäröi miinat numeroilla
+    /**
+     * Ympyröi miinat numeroilla niin, että jokaista numeroa ympyröi numeron
+     * osoittaman määrän verran miinoja. Pitää myös huolen siitä, ettei yritä
+     * laittaa numeroita ruudukon ulkopuolelle.
+     * 
+     * @see toimintalogiikka.Haravalogiikka#onkoRuudukossa(int, int)
+     */
     private void laitaNumerotRuudukkoon() {
         int x, y;
 
@@ -106,7 +145,13 @@ public class Haravalogiikka {
         }
     }
 
-    // Tutkii, onko ruudukossa kohtaa (x, y)
+    /**
+     * Tutkii, onko ruudukossa sijaintia (x, y).
+     * 
+     * @param x x-koordinaatti 
+     * @param y y-koordinaatti
+     * @return  true, jos ruudukossa on parametrien mukainen sijainti. Muuten false.
+     */
     public boolean onkoRuudukossa(int x, int y) {
 
         if (x <= (miinakentta.length - 1) && y <= (miinakentta.length - 1)
@@ -131,6 +176,16 @@ public class Haravalogiikka {
 
     // Jos annettu ruutu on tyhjä, merkitsee sen ja sitä ympäröivät tyhjät
     // ruudut 9:llä. Flood-fill.
+    /**
+     * Jos annettu ruutu on tyhjä, metodi merkitsee sen ja sitä ympäröivät
+     * tyhjät ruudut yhdeksiköillä. 9 tarkoittaa tyhjää, avattavaa ruutua.
+     * Toimii kuin flood fill -algoritmi.     * 
+     * 
+     * @param miinakentta Miinakenttä, int[][]
+     * @param r Ruutu-apuluokkaa käyttäen annettu ruudun sijainti.
+     * 
+     * @see toimintalogiikka.Haravalogiikka#onkoRuudukossa(int, int)
+     */
     public void etsiTyhjat(int[][] miinakentta, Ruutu r) {
 
         int index = 0, koko = miinakentta.length-1;
