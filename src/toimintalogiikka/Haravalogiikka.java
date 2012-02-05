@@ -13,6 +13,7 @@ public class Haravalogiikka {
     private int[][] miinakentta;
     private int[] miinatX, miinatY;
     private int[] tyhjatY, tyhjatX;
+    private int ruudukonSivu;
     
 
     /**
@@ -26,6 +27,7 @@ public class Haravalogiikka {
      * @see toimintalogiikka.Haravalogiikka#maaritaMiinamaara(int)
      */
     public Haravalogiikka(int koko) {
+        ruudukonSivu = koko;
         luoRuudukko(koko);
         laitaMiinatRuudukkoon(koko, maaritaMiinamaara(koko));
         laitaNumerotRuudukkoon();
@@ -184,7 +186,14 @@ public class Haravalogiikka {
      */
     public int[] getTyhjatY() {
         return tyhjatY;
-    }    
+    } 
+    
+    /**
+     * Palauttaa miinamäärän
+     */
+    public int getMiinamaara() {
+        return(maaritaMiinamaara(ruudukonSivu));
+    }
    
 
     // Jos annettu ruutu on tyhjä, merkitsee sen ja sitä ympäröivät tyhjät

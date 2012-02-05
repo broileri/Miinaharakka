@@ -19,6 +19,7 @@ import toimintalogiikka.Ruutu;
 /**
  * Luokka luo peli-ikkunan ja suorittaa pelin ja käyttäjän väliseen
  * kanssakäyntiin liittyviä operaatioita.
+ *
  * @author Broileri
  */
 public class Kayttoliittyma extends JFrame {
@@ -30,29 +31,28 @@ public class Kayttoliittyma extends JFrame {
     private int[] xAuki, yAuki;
     private Ajastin aika;
     private ImageIcon harakka, hkummastus, hvoitto, hkuolema, miina, lippu, kysymys,
-            yksi, kaksi, kolme, nelja, viisi, kuusi, seitseman, kahdeksan;
+            yksi, kaksi, kolme, nelja, viisi, kuusi, seitseman, kahdeksan, boom;
     private Haravalogiikka logiikka;
 
     /**
      * Konstruktori luo pelissä tarvittavat ikonit ja nappulat.
-     * 
-     * Lisäksi se kutsuu metodia, joka luo valikkonapeille
-     * tapahtumakuuntelijat ja metodia, joka rakentaa varsinaisen
-     * peli-ikkunan.
-     * 
+     *
+     * Lisäksi se kutsuu metodia, joka luo valikkonapeille tapahtumakuuntelijat
+     * ja metodia, joka rakentaa varsinaisen peli-ikkunan.
+     *
      * Lopuksi konstruktori laittaa peli-ikkunaan otsikon ja tekee siitä
      * loppuvan ja näkyvän.
-     * 
+     *
      * @see grafiikat.Kayttoliittyma#tapahtumakuuntelijatValikolle()
      * @see grafiikat.Kayttoliittyma#aloitaPeli()
      */
     public Kayttoliittyma() {
 
         // Nappi-ikonit
-        harakka = new ImageIcon(getClass().getResource("Kuvat/miinaharakka.png"));
-        hkummastus = new ImageIcon(getClass().getResource("Kuvat/miinaharakkaiik.png"));
-        hvoitto = new ImageIcon(getClass().getResource("Kuvat/miinaharakkajee.png"));
-        hkuolema = new ImageIcon(getClass().getResource("Kuvat/miinaharakkakuol.png"));
+        harakka = new ImageIcon(getClass().getResource("Kuvat/miinaharakka2.png"));
+        hkummastus = new ImageIcon(getClass().getResource("Kuvat/miinaharakkaiik2.png"));
+        hvoitto = new ImageIcon(getClass().getResource("Kuvat/miinaharakkajee2.png"));
+        hkuolema = new ImageIcon(getClass().getResource("Kuvat/miinaharakkakuol2.png"));
         miina = new ImageIcon(getClass().getResource("Kuvat/miina2.png"));
         lippu = new ImageIcon(getClass().getResource("Kuvat/lippu.png"));
         kysymys = new ImageIcon(getClass().getResource("Kuvat/kysymys.png"));
@@ -64,6 +64,7 @@ public class Kayttoliittyma extends JFrame {
         kuusi = new ImageIcon(getClass().getResource("Kuvat/kuusi.png"));
         seitseman = new ImageIcon(getClass().getResource("Kuvat/seitseman.png"));
         kahdeksan = new ImageIcon(getClass().getResource("Kuvat/kahdeksan.png"));
+        boom = new ImageIcon(getClass().getResource("Kuvat/rajahdys.png"));
 
 
         // Nappulat
@@ -93,10 +94,10 @@ public class Kayttoliittyma extends JFrame {
 
     /**
      * Metodi aloittaa uuden pelin. Se luo uuden JButton-HashMapin, johon
-     * teePeliIkkuna() tallentaa ruudukkonapit. Lopuksi aloitaPeli()
-     * lisää luodulle peliruudukolle hiirikuuntelijat ja luo uuden ilmentymän
+     * teePeliIkkuna() tallentaa ruudukkonapit. Lopuksi aloitaPeli() lisää
+     * luodulle peliruudukolle hiirikuuntelijat ja luo uuden ilmentymän
      * Haravalogiikasta.
-     * 
+     *
      * @see grafiikat.Kayttoliittyma#teePeliIkkuna()
      * @see toimintalogiikka.Haravalogiikka#Haravalogiikka(int)
      */
@@ -109,43 +110,91 @@ public class Kayttoliittyma extends JFrame {
         for (int i = 0; i < pelinKoko * pelinKoko; i++) {
             hiirikuuntelijatRuudukolle(i);
         }
-       
+
         logiikka = new Haravalogiikka(pelinKoko);
     }
 
     /**
-     * Tätä metodia kutsutaan, kun pelaaja voittaa pelin.
-     * Se asettaa reset-napin kuvaksi voitokkaan harakan
-     * ja pysäyttää ajastimen.
-     * Lopuksi metodi paljastaa koko pelikentän.
-     * 
+     * Tätä metodia kutsutaan, kun pelaaja voittaa pelin. Se asettaa reset-napin
+     * kuvaksi voitokkaan harakan ja pysäyttää ajastimen. Lopuksi metodi
+     * paljastaa koko pelikentän.
+     *
      * @see grafiikat.Ajastin#Ajastin(JPanel)
      */
     public void voittoKotiin() {
         reset.setIcon(hvoitto);
         aika.seis();
-        // Lisää kentän paljastus tähän
+        paljastaKentta(1000);
     }
 
     /**
-     * Tätä metodia kutsutaan, kun pelaaja häviää pelin.
-     * Se asettaa reset-napin kuvaksi kuolleen harakan ja
-     * pysäyttää ajastimen. Lopuksi metodi paljastaa koko pelikentän.
-     * 
+     * Tätä metodia kutsutaan, kun pelaaja häviää pelin. Se asettaa reset-napin
+     * kuvaksi kuolleen harakan ja pysäyttää ajastimen. Lopuksi metodi paljastaa
+     * koko pelikentän.
+     *
      * @see grafiikat.Ajastin#Ajastin(JPanel)
      */
-    public void kirvelevaTappio() {
+    public ImageIcon tappio(int avain) {
         reset.setIcon(hkuolema);
         aika.seis();
-        // Lisää kentän paljastus tähän
+        return paljastaKentta(avain);
     }
 
     /**
-     * Kun pelaaja avaa tyhjän kenttäruudun, myös kaikki sitä ympäröivät
-     * tyhjät painikkeet avautuvat. Tämä metodi avaa tyhjän alueen reunoilta
-     * numerot piilottavat painikkeet ja asettaa sen jälkeen avattujen
-     * painikkeiden disabled-ikoniksi oikean numeron.
-     * 
+     * Paljastaa koko pelialueen miinat, tyhjät ja numerot.
+     */
+    public ImageIcon paljastaKentta(int avainJosTappio) {
+
+        int[][] miinakentta = logiikka.getRuudukko();
+
+        for (int i = 0; i < pelinKoko * pelinKoko - 1; i++) {
+            String kohta = Integer.toString(i);
+
+            haeIndeksi(i);
+            int mikaRuutu = miinakentta[ax][yy];
+            
+            // Miina 
+            if (mikaRuutu == -1) {
+                napukat.get(kohta).setIcon(miina);
+                napukat.get(kohta).setDisabledIcon(miina);
+            } // Numero
+            else {
+                napukat.get(kohta).setIcon(numeroruudunAvaus(mikaRuutu));
+                napukat.get(kohta).setDisabledIcon(numeroruudunAvaus(mikaRuutu));
+            }
+
+            napukat.get(kohta).setEnabled(false);
+        }
+        if (avainJosTappio != 1000) {
+            return boom;
+        }
+        return null;
+    }
+
+    /**
+     * Tarkastaa, onko peli voitettu.
+     */
+    public void tilannekatsaus() {
+        
+        int auki = 0;
+        for (int i = 0; i < pelinKoko*pelinKoko; i++) {
+            if (!napukat.get(Integer.toString(i)).isEnabled()) {
+                auki++;
+            }
+        }
+        if (logiikka.getMiinamaara() == pelinKoko*pelinKoko - auki) {
+            voittoKotiin();
+        }
+        
+        
+    }
+
+    /**
+     * Kun pelaaja avaa tyhjän kenttäruudun, myös kaikki sitä ympäröivät tyhjät
+     * painikkeet avautuvat. Tämä metodi avaa tyhjän alueen reunoilta numerot
+     * piilottavat painikkeet ja asettaa sen jälkeen avattujen painikkeiden
+     * disabled-ikoniksi oikean numeron.
+     *
      * @param x Tyhjien ruutujen x-koordinaatit.
      * @param y Tyhjien ruutujen y-koordinaatit.
      */
@@ -219,25 +268,25 @@ public class Kayttoliittyma extends JFrame {
         }
         for (int i = 0; i < indeksi; i++) {
             if (hashMapIndeksit[i] != -9) {
-            JButton nappi = napukat.get(Integer.toString(hashMapIndeksit[i]));
-            haeIndeksi(hashMapIndeksit[i]);
-            nappi.setIcon(numeroruudunAvaus(miinakentta[ax][yy]));
-            nappi.setEnabled(false);
-            nappi.setDisabledIcon(numeroruudunAvaus(miinakentta[ax][yy]));
+                JButton nappi = napukat.get(Integer.toString(hashMapIndeksit[i]));
+                haeIndeksi(hashMapIndeksit[i]);
+                nappi.setIcon(numeroruudunAvaus(miinakentta[ax][yy]));
+                nappi.setEnabled(false);
+                nappi.setDisabledIcon(numeroruudunAvaus(miinakentta[ax][yy]));
             }
         }
 
     }
 
     /**
-     * Metodi palauttaa oikeanlaisen kuvan käyttäjän avaamaan
-     * ruutuun ja kutsuu tarvittaessa tyhjien ruutujen ja numeroruutujen
-     * avaamiseen tarkoitettuja metodeja.
-     * 
+     * Metodi palauttaa oikeanlaisen kuvan käyttäjän avaamaan ruutuun ja kutsuu
+     * tarvittaessa tyhjien ruutujen ja numeroruutujen avaamiseen tarkoitettuja
+     * metodeja.
+     *
      * @param indeksi Annetun napin HashMap-avain.
      * @param nappi Käyttäjän painama nappi.
      * @return Ikoni (kuva tai tyhjä) avattuun ruutuun.
-     * 
+     *
      * @see grafiikat.Kayttoliittyma#avaaTyhjienReunat(int[],int[])
      * @see grafiikat.Kayttoliittyma#numeroruudunAvaus(int)
      */
@@ -248,8 +297,7 @@ public class Kayttoliittyma extends JFrame {
 
         // Miinan avaus
         if (mikaRuutu == -1) {
-            kirvelevaTappio();
-            return miina;
+            return tappio(indeksi);            
 
             // Tyhjän ruudun avaus    
         } else if (mikaRuutu == 0) {
@@ -261,7 +309,7 @@ public class Kayttoliittyma extends JFrame {
             // Tyhjien avaaminen ja int-taulukoiden tyhjien kenttien (-9) poissulkeminen
             for (int i = 0; i < xAuki.length; i++) {
                 if (xAuki[i] != -9 && yAuki[i] != -9) {
-                    int nappiIndeksi = teeIndeksi(xAuki[i], yAuki[i]);                    
+                    int nappiIndeksi = teeIndeksi(xAuki[i], yAuki[i]);
                     napukat.get(Integer.toString(nappiIndeksi)).setEnabled(false);
                 }
             }
@@ -277,10 +325,10 @@ public class Kayttoliittyma extends JFrame {
     /**
      * Metodi määrittää, minkä numerokuvan sitä kutsuva asetaKuvaRuutuun()-
      * metodi palauttaa avatun napin ikoniksi.
-     * 
+     *
      * @param mikaRuutu Avatussa ruudussa oleva lähiruutujen miinamäärää
      * ilmoittava numero.
-     * 
+     *
      * @return Numeroikoni.
      */
     public ImageIcon numeroruudunAvaus(int mikaRuutu) {
@@ -305,10 +353,11 @@ public class Kayttoliittyma extends JFrame {
         return null;
     }
 
-   /**
-    * Metodi muuttaa JButton-HashMapin avaimen int[]-indekseiksi
-    * @param indeksi HashMap-avain
-    */
+    /**
+     * Metodi muuttaa JButton-HashMapin avaimen int[]-indekseiksi
+     *
+     * @param indeksi HashMap-avain
+     */
     public void haeIndeksi(int indeksi) {
 
         int kentanRuutu = 0;
@@ -327,6 +376,7 @@ public class Kayttoliittyma extends JFrame {
 
     /**
      * int[]-indeksien muuttaminen JButton-HashMapin avaimeksi
+     *
      * @param x x-koordinaatti
      * @param y y-koordinaatti
      * @return HashMap-avain
@@ -336,9 +386,9 @@ public class Kayttoliittyma extends JFrame {
         return (x + y + x * (pelinKoko - 1));
     }
 
-    
     /**
      * Metodi luo peliruudukolle hiirikuuntelijat.
+     *
      * @param indeksi JButton-HashMapin avain
      */
     private void hiirikuuntelijatRuudukolle(final int indeksi) {
@@ -357,6 +407,7 @@ public class Kayttoliittyma extends JFrame {
                     nappula.setIcon(asetaKuvaAvattuun(indeksi, nappula));
                     nappula.setEnabled(false);
                     nappula.setDisabledIcon(asetaKuvaAvattuun(indeksi, nappula));
+                    tilannekatsaus();
 
                 } // Jos ruutu tyhjä ja HIIRI3, niin ruutuun lippu
                 else if (e.getButton() == MouseEvent.BUTTON3 && nappula.getIcon() == null) {
@@ -386,7 +437,7 @@ public class Kayttoliittyma extends JFrame {
                     public void actionPerformed(ActionEvent tapahtuma) {
                         reset.setIcon(harakka);
                         aika.seis();
-                        aika.resetoi();                        
+                        aika.resetoi();
                         // Lisää tähän vielä uuden pelin luonti
 
                     }
@@ -432,7 +483,6 @@ public class Kayttoliittyma extends JFrame {
                 });
     }
 
-    
     /**
      * Metodi rakentaa peli-ikkunan lisäämällä siihen yläpaneelin
      * valikkonappeineen ja peliruudukon.
@@ -454,7 +504,7 @@ public class Kayttoliittyma extends JFrame {
             String avain = Integer.toString(i);
             ruudukkopaneeli.add(napukat.get(avain));
         }
-        
+
         // Paneelien lisääminen pelikenttään        
         this.setLayout(new BorderLayout(10, 10));
         this.add("Center", ruudukkopaneeli);
@@ -463,30 +513,25 @@ public class Kayttoliittyma extends JFrame {
         this.setResizable(false);
         this.setVisible(true);
     }
-    
-    /*public void teeRuudukko() {
-        
-       // Nappularuudukon lisäys
-        JPanel ruudukkopaneeli = new JPanel(new GridLayout(pelinKoko, pelinKoko));
-        teeNappeja(pelinKoko * pelinKoko);
-        for (int i = 0; i < napukat.size(); i++) {
-            String avain = Integer.toString(i);
-            ruudukkopaneeli.add(napukat.get(avain));
-        }
-        
-        for (int i = 0; i < pelinKoko * pelinKoko; i++) {
-            hiirikuuntelijatRuudukolle(i);
-        }
-        
-        this.add("Center", ruudukkopaneeli);        
-              
-    }
-    * 
-    */
 
+    /*
+     * public void teeRuudukko() {
+     *
+     * // Nappularuudukon lisäys JPanel ruudukkopaneeli = new JPanel(new
+     * GridLayout(pelinKoko, pelinKoko)); teeNappeja(pelinKoko * pelinKoko); for
+     * (int i = 0; i < napukat.size(); i++) { String avain =
+     * Integer.toString(i); ruudukkopaneeli.add(napukat.get(avain)); }
+     *
+     * for (int i = 0; i < pelinKoko * pelinKoko; i++) {
+     * hiirikuuntelijatRuudukolle(i); }
+     *
+     * this.add("Center", ruudukkopaneeli);      *
+     * }
+     *
+     */
     /**
      * Metodi tekee annetun määrän JButtoneita HashMapiin.
-     * 
+     *
      * @param lkm Haluttu JButtonien määrä
      */
     private void teeNappeja(int lkm) {
@@ -504,7 +549,7 @@ public class Kayttoliittyma extends JFrame {
 
     /**
      * Metodi palauttaa pelinKoko-muuttujan.
-     * 
+     *
      * @return pelinKoko
      */
     public int getPelinKoko() {
@@ -513,7 +558,7 @@ public class Kayttoliittyma extends JFrame {
 
     /**
      * Metodi palauttaa JButton-HashMapin.
-     * 
+     *
      * @return napukat
      */
     public HashMap getNapit() {
