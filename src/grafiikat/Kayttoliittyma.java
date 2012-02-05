@@ -1,24 +1,19 @@
 package grafiikat;
 
-import java.awt.BorderLayout;
-import java.awt.Dimension;
-import java.awt.FlowLayout;
-import java.awt.GridLayout;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.HashMap;
-import javax.swing.ImageIcon;
-import javax.swing.JButton;
-import javax.swing.JFrame;
-import javax.swing.JPanel;
+import javax.swing.*;
 import toimintalogiikka.Haravalogiikka;
 import toimintalogiikka.Ruutu;
 
 // TO DO
-// High score?, lippumittari, kuvat liputetuille miinoille?, kuolleen harakan parantelu,
-// ajastinjutut, jos vinokulmasta aukeaa nolla, avaa sen ympäristökin
+// High score?, kuvat liputetuille miinoille?, kuolleen harakan parantelu,
+// ruutujen symmetrisyys, kananmuna, räjähdys,
+// jos vinokulmasta aukeaa nolla, avaa sen ympäristökin
 // Selvitä bugit: joskus ei aukea kunnolla avatessa tyhjää 64
 /**
  * Luokka luo peli-ikkunan ja suorittaa pelin ja käyttäjän väliseen
@@ -31,14 +26,15 @@ public class Kayttoliittyma extends JFrame {
     // Napit ja muut
     private JButton iso, pieni, normi, reset;
     private HashMap<String, JButton> napukat;
-    private int pelinKoko, ax, yy;
+    private int pelinKoko, ax, yy, lippumaara;
     private int[] xAuki, yAuki;
     private Ajastin aika;
     private ImageIcon harakka, hkummastus, hvoitto, hkuolema, miina, lippu, kysymys,
             yksi, kaksi, kolme, nelja, viisi, kuusi, seitseman, kahdeksan, boom;
     private Haravalogiikka logiikka;
     private JPanel ruudukkopaneeli;
-    private boolean onkoEkaKrt = true;
+    private boolean onkoEkaKrt = true, ekaKlikkaus;
+    private JTextField miinamittari;
 
     /**
      * Konstruktori luo pelissä tarvittavat ikonit ja nappulat.
@@ -81,9 +77,11 @@ public class Kayttoliittyma extends JFrame {
         normi = new JButton("M");
         normi.setFocusPainted(false);
         iso = new JButton("L");
-        iso.setFocusPainted(false);
-        //napukat = new HashMap<String, JButton>();
+        iso.setFocusPainted(false);        
         pelinKoko = 9;
+        
+        // Miinamittari
+        miinamittari = new JTextField();
 
         // Tapahtumakuuntelijoiden asettaminen
         tapahtumakuuntelijatValikolle();
@@ -111,7 +109,7 @@ public class Kayttoliittyma extends JFrame {
     private void aloitaPeli() {
 
         napukat = new HashMap<String, JButton>();
-
+        
         if (onkoEkaKrt) {
             onkoEkaKrt = false;
             ruudukkopaneeli = teeRuudukkopaneeli();
@@ -123,18 +121,21 @@ public class Kayttoliittyma extends JFrame {
             this.setBounds(300, 300, 200, 200);
             this.setResizable(false);
             this.setVisible(true);
-
+            
         } else {
             this.remove(ruudukkopaneeli);
             ruudukkopaneeli = teeRuudukkopaneeli();
             this.add("Center", ruudukkopaneeli);
-        }
-        this.pack();
+        }        
 
         for (int i = 0; i < pelinKoko * pelinKoko; i++) {
             hiirikuuntelijatRuudukolle(i);
         }
         logiikka = new Haravalogiikka(pelinKoko);
+        lippumaara = logiikka.getMiinamaara();
+        miinamittari.setText(Integer.toString(lippumaara));
+        ekaKlikkaus = true;
+        this.pack();
     }
 
     /**
@@ -161,6 +162,10 @@ public class Kayttoliittyma extends JFrame {
         reset.setIcon(hkuolema);
         aika.seis();
         return paljastaKentta(avain);
+    }
+    
+    public void lippumittari() {
+        int miinat = logiikka.getMiinamaara();
     }
 
     /**
@@ -421,20 +426,28 @@ public class Kayttoliittyma extends JFrame {
 
                 // Jos ruudussa ei lippua ja HIIRI1, se aukeaa
                 if (e.getButton() == MouseEvent.BUTTON1
-                        && nappula.getIcon() != lippu && nappula.isEnabled()) {
-
+                        && nappula.getIcon() != lippu && nappula.isEnabled()) { 
+                    
+                    if (ekaKlikkaus) {
+                        ekaKlikkaus = false;
+                        aika.aloita();
+                    }
                     nappula.setIcon(asetaKuvaAvattuun(indeksi, nappula));
                     nappula.setEnabled(false);
-                    nappula.setDisabledIcon(asetaKuvaAvattuun(indeksi, nappula));
+                    nappula.setDisabledIcon(asetaKuvaAvattuun(indeksi, nappula));                    
                     tilannekatsaus();
 
                 } // Jos ruutu tyhjä ja HIIRI3, niin ruutuun lippu
                 else if (e.getButton() == MouseEvent.BUTTON3 && nappula.getIcon() == null) {
                     nappula.setIcon(lippu);
+                    lippumaara--;
+                    miinamittari.setText(Integer.toString(lippumaara));
 
                 } // Jos ruudussa lippu ja HIIRI3, ruutuun ? 
                 else if (e.getButton() == MouseEvent.BUTTON3 && nappula.getIcon() == lippu) {
                     nappula.setIcon(kysymys);
+                    lippumaara++;
+                    miinamittari.setText(Integer.toString(lippumaara));
                 } // Jos ruudussa ? ja HIIRI3, ruutu tyhjäksi
                 else if (e.getButton() == MouseEvent.BUTTON3 && nappula.getIcon() == kysymys) {
                     nappula.setIcon(null);
@@ -457,7 +470,6 @@ public class Kayttoliittyma extends JFrame {
                         reset.setIcon(harakka);
                         aika.seis();
                         aika.resetoi();
-                        // Lisää tähän vielä uuden pelin luonti
                         aloitaPeli();
                     }
                 });
@@ -527,6 +539,12 @@ public class Kayttoliittyma extends JFrame {
     private JPanel teeYlapaneeli() {
 
         JPanel ylapaneeli = new JPanel(new FlowLayout());
+        Font f = new Font("Helvetica", Font.BOLD, 14);        
+        miinamittari.setFont(f);
+        miinamittari.setEditable(false);
+        miinamittari.setColumns(2);
+        ylapaneeli.add(new JLabel(miina));
+        ylapaneeli.add(miinamittari);
         ylapaneeli.add(pieni);
         ylapaneeli.add(normi);
         ylapaneeli.add(iso);

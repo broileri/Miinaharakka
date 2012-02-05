@@ -10,9 +10,9 @@ import javax.swing.Timer;
 
 /**
  * Luokka pelin ajanottoa varten.
- * 
+ *
  * @author Broileri
- * 
+ *
  * @see grafiikat.Kayttoliittyma
  */
 public class Ajastin extends JFrame implements ActionListener {
@@ -20,12 +20,12 @@ public class Ajastin extends JFrame implements ActionListener {
     private JTextField aikakentta;
     private Timer ajastin = new Timer(1000, this);
     private int sekunnit = 1;
-    private boolean lopetus = false;
+    private boolean lopetus = false, onAlkanut = false;
 
     /**
-     * Konstruktori lisää annettuun JPaneliin ajastimen, joka laskee
-     * sekunteja ja näyttää ne vaihtuvina numeroina ajastinkentässä.
-     * 
+     * Konstruktori lisää annettuun JPaneliin ajastimen, joka laskee sekunteja
+     * ja näyttää ne vaihtuvina numeroina ajastinkentässä.
+     *
      * @param paneeli Annettu JPanel.
      */
     public Ajastin(JPanel paneeli) {
@@ -35,18 +35,17 @@ public class Ajastin extends JFrame implements ActionListener {
         aikakentta = new JTextField("0");
         aikakentta.setFont(f);
         aikakentta.setEditable(false);
-        paneeli.add(aikakentta);        
-        aikakentta.setColumns(4);       
-
-        ajastin.start();
+        paneeli.add(aikakentta);
+        aikakentta.setColumns(4);
     }
+
     /**
-     *  Pysäyttää ajastimen.
+     * Pysäyttää ajastimen.
      */
     public void seis() {
-       lopetus = true; 
+        lopetus = true;
     }
-    
+
     /**
      * Saattaa ajastimen alkutilaansa.
      */
@@ -54,29 +53,32 @@ public class Ajastin extends JFrame implements ActionListener {
         sekunnit = 1;
         aikakentta.setText("0");
     }
+
     /**
      * Käynnistää ajastimen.
      */
-    public void aloita() {
-        ajastin.start();
+    public void aloita() {        
+            ajastin.start();          
     }
 
     /**
      * Palauttaa sekunnit.
-     * @return 
+     *
+     * @return
      */
     public int getSekunnit() {
         return sekunnit;
     }
-    
+
     @Override
     public void actionPerformed(ActionEvent e) {
-        if (!lopetus) {            
-            aikakentta.setText(Integer.toString(sekunnit));            
+        if (!lopetus) {
+            aikakentta.setText(Integer.toString(sekunnit));
             sekunnit = sekunnit + 1;
         } else {
             ajastin.stop();
             lopetus = false;
+            onAlkanut = false;
         }
     }
 }
