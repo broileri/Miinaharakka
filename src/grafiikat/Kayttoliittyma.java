@@ -16,6 +16,10 @@ import javax.swing.JPanel;
 import toimintalogiikka.Haravalogiikka;
 import toimintalogiikka.Ruutu;
 
+// TO DO
+// High score?, lippumittari, kuvat liputetuille miinoille?, kuolleen harakan parantelu,
+// ajastinjutut, jos vinokulmasta aukeaa nolla, avaa sen ympäristökin
+// Selvitä bugit: joskus ei aukea kunnolla avatessa tyhjää 64
 /**
  * Luokka luo peli-ikkunan ja suorittaa pelin ja käyttäjän väliseen
  * kanssakäyntiin liittyviä operaatioita.
@@ -33,6 +37,8 @@ public class Kayttoliittyma extends JFrame {
     private ImageIcon harakka, hkummastus, hvoitto, hkuolema, miina, lippu, kysymys,
             yksi, kaksi, kolme, nelja, viisi, kuusi, seitseman, kahdeksan, boom;
     private Haravalogiikka logiikka;
+    private JPanel ruudukkopaneeli;
+    private boolean onkoEkaKrt = true;
 
     /**
      * Konstruktori luo pelissä tarvittavat ikonit ja nappulat.
@@ -66,7 +72,6 @@ public class Kayttoliittyma extends JFrame {
         kahdeksan = new ImageIcon(getClass().getResource("Kuvat/kahdeksan.png"));
         boom = new ImageIcon(getClass().getResource("Kuvat/rajahdys.png"));
 
-
         // Nappulat
         reset = new JButton(harakka);
         reset.setPressedIcon(hkummastus);
@@ -93,24 +98,42 @@ public class Kayttoliittyma extends JFrame {
     }
 
     /**
-     * Metodi aloittaa uuden pelin. Se luo uuden JButton-HashMapin, johon
-     * teePeliIkkuna() tallentaa ruudukkonapit. Lopuksi aloitaPeli() lisää
+     * Metodi aloittaa uuden pelin. Se luo uuden menu-paneelin
+     * teeYlapaneeli()-metodin avulla ja JButton-HashMapin, johon
+     * teeRuudukkopaneeli() tallentaa ruudukkonapit. Lopuksi aloitaPeli() lisää
      * luodulle peliruudukolle hiirikuuntelijat ja luo uuden ilmentymän
      * Haravalogiikasta.
      *
-     * @see grafiikat.Kayttoliittyma#teePeliIkkuna()
+     * @see grafiikat.Kayttoliittyma#teeRuudukkopaneeli()
+     * @see grafiikat.Kayttoliittyma#teeYlapaneeli()
      * @see toimintalogiikka.Haravalogiikka#Haravalogiikka(int)
      */
     private void aloitaPeli() {
 
         napukat = new HashMap<String, JButton>();
-        teePeliIkkuna();
+
+        if (onkoEkaKrt) {
+            onkoEkaKrt = false;
+            ruudukkopaneeli = teeRuudukkopaneeli();
+
+            // Paneelien lisääminen pelikenttään        
+            this.setLayout(new BorderLayout(10, 10));
+            this.add("Center", ruudukkopaneeli);
+            this.add("North", teeYlapaneeli());
+            this.setBounds(300, 300, 200, 200);
+            this.setResizable(false);
+            this.setVisible(true);
+
+        } else {
+            this.remove(ruudukkopaneeli);
+            ruudukkopaneeli = teeRuudukkopaneeli();
+            this.add("Center", ruudukkopaneeli);
+        }
         this.pack();
 
         for (int i = 0; i < pelinKoko * pelinKoko; i++) {
             hiirikuuntelijatRuudukolle(i);
         }
-
         logiikka = new Haravalogiikka(pelinKoko);
     }
 
@@ -147,12 +170,12 @@ public class Kayttoliittyma extends JFrame {
 
         int[][] miinakentta = logiikka.getRuudukko();
 
-        for (int i = 0; i < pelinKoko * pelinKoko - 1; i++) {
-            String kohta = Integer.toString(i);
+        for (int i = 0; i < pelinKoko * pelinKoko; i++) {
 
+            String kohta = Integer.toString(i);
             haeIndeksi(i);
             int mikaRuutu = miinakentta[ax][yy];
-            
+
             // Miina 
             if (mikaRuutu == -1) {
                 napukat.get(kohta).setIcon(miina);
@@ -162,7 +185,6 @@ public class Kayttoliittyma extends JFrame {
                 napukat.get(kohta).setIcon(numeroruudunAvaus(mikaRuutu));
                 napukat.get(kohta).setDisabledIcon(numeroruudunAvaus(mikaRuutu));
             }
-
             napukat.get(kohta).setEnabled(false);
         }
         if (avainJosTappio != 1000) {
@@ -175,18 +197,17 @@ public class Kayttoliittyma extends JFrame {
      * Tarkastaa, onko peli voitettu.
      */
     public void tilannekatsaus() {
-        
+
+        // Muuttujasta ehkä luokkakohtainen...?
         int auki = 0;
-        for (int i = 0; i < pelinKoko*pelinKoko; i++) {
+        for (int i = 0; i < pelinKoko * pelinKoko; i++) {
             if (!napukat.get(Integer.toString(i)).isEnabled()) {
                 auki++;
             }
         }
-        if (logiikka.getMiinamaara() == pelinKoko*pelinKoko - auki) {
+        if (logiikka.getMiinamaara() == pelinKoko * pelinKoko - auki) {
             voittoKotiin();
         }
-        
-        
     }
 
     /**
@@ -205,14 +226,13 @@ public class Kayttoliittyma extends JFrame {
         for (int i = 0; i < x.length; i++) {
             hashMapIndeksit[i] = -9;
         }
-
         int indeksi = 0;
 
         for (int i = 0; i < x.length; i++) {
 
             if (x[i] != -9) {
 
-                // Yla
+                // Ylä
                 if (logiikka.onkoRuudukossa(x[i] - 1, y[i] - 1)) {
                     if (miinakentta[x[i] - 1][y[i] - 1] != 9) {
                         hashMapIndeksit[indeksi] = teeIndeksi(x[i] - 1, y[i] - 1);
@@ -275,7 +295,6 @@ public class Kayttoliittyma extends JFrame {
                 nappi.setDisabledIcon(numeroruudunAvaus(miinakentta[ax][yy]));
             }
         }
-
     }
 
     /**
@@ -297,7 +316,7 @@ public class Kayttoliittyma extends JFrame {
 
         // Miinan avaus
         if (mikaRuutu == -1) {
-            return tappio(indeksi);            
+            return tappio(indeksi);
 
             // Tyhjän ruudun avaus    
         } else if (mikaRuutu == 0) {
@@ -439,7 +458,7 @@ public class Kayttoliittyma extends JFrame {
                         aika.seis();
                         aika.resetoi();
                         // Lisää tähän vielä uuden pelin luonti
-
+                        aloitaPeli();
                     }
                 });
 
@@ -451,8 +470,7 @@ public class Kayttoliittyma extends JFrame {
                         aika.seis();
                         aika.resetoi();
                         pelinKoko = 9;
-                        // Lisää tähän vielä uuden pelin luonti
-
+                        aloitaPeli();
                     }
                 });
 
@@ -464,8 +482,7 @@ public class Kayttoliittyma extends JFrame {
                         aika.seis();
                         aika.resetoi();
                         pelinKoko = 16;
-                        // Lisää tähän vielä uuden pelin luonti
-
+                        aloitaPeli();
                     }
                 });
 
@@ -477,19 +494,38 @@ public class Kayttoliittyma extends JFrame {
                         aika.seis();
                         aika.resetoi();
                         pelinKoko = 22;
-                        // Lisää tähän vielä uuden pelin luonti
-
+                        aloitaPeli();
                     }
                 });
     }
 
     /**
-     * Metodi rakentaa peli-ikkunan lisäämällä siihen yläpaneelin
-     * valikkonappeineen ja peliruudukon.
+     * Metodi luo peliruudukkopaneelin ja palauttaa sen. Metodia käyttää
+     * aloitaPeli().
+     *
+     * @return ruudukkopaneeli
+     * @see grafiikat.Kayttoliittyma#aloitaPeli()
      */
-    private void teePeliIkkuna() {
+    private JPanel teeRuudukkopaneeli() {
 
-        // Yläpaneelin lisäys
+        ruudukkopaneeli = new JPanel(new GridLayout(pelinKoko, pelinKoko));
+        teeNappeja(pelinKoko * pelinKoko);
+        for (int i = 0; i < napukat.size(); i++) {
+            String avain = Integer.toString(i);
+            napukat.get(avain).setEnabled(true);
+            ruudukkopaneeli.add(napukat.get(avain));
+        }
+        return ruudukkopaneeli;
+    }
+
+    /**
+     * Metodi luo valikkopaneelin ja palauttaa sen.
+     *
+     * @return yläpaneeli
+     * @see grafiikat.Kayttoliittyma#aloitaPeli()
+     */
+    private JPanel teeYlapaneeli() {
+
         JPanel ylapaneeli = new JPanel(new FlowLayout());
         ylapaneeli.add(pieni);
         ylapaneeli.add(normi);
@@ -497,38 +533,9 @@ public class Kayttoliittyma extends JFrame {
         aika = new Ajastin(ylapaneeli);
         ylapaneeli.add(reset);
 
-        // Nappularuudukon lisäys
-        JPanel ruudukkopaneeli = new JPanel(new GridLayout(pelinKoko, pelinKoko));
-        teeNappeja(pelinKoko * pelinKoko);
-        for (int i = 0; i < napukat.size(); i++) {
-            String avain = Integer.toString(i);
-            ruudukkopaneeli.add(napukat.get(avain));
-        }
-
-        // Paneelien lisääminen pelikenttään        
-        this.setLayout(new BorderLayout(10, 10));
-        this.add("Center", ruudukkopaneeli);
-        this.add("North", ylapaneeli);
-        this.setBounds(300, 300, 200, 200);
-        this.setResizable(false);
-        this.setVisible(true);
+        return ylapaneeli;
     }
 
-    /*
-     * public void teeRuudukko() {
-     *
-     * // Nappularuudukon lisäys JPanel ruudukkopaneeli = new JPanel(new
-     * GridLayout(pelinKoko, pelinKoko)); teeNappeja(pelinKoko * pelinKoko); for
-     * (int i = 0; i < napukat.size(); i++) { String avain =
-     * Integer.toString(i); ruudukkopaneeli.add(napukat.get(avain)); }
-     *
-     * for (int i = 0; i < pelinKoko * pelinKoko; i++) {
-     * hiirikuuntelijatRuudukolle(i); }
-     *
-     * this.add("Center", ruudukkopaneeli);      *
-     * }
-     *
-     */
     /**
      * Metodi tekee annetun määrän JButtoneita HashMapiin.
      *
