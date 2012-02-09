@@ -12,8 +12,7 @@ import toimintalogiikka.Ruutu;
 
 // TO DO
 // High score?, kuvat liputetuille miinoille?, kuolleen harakan parantelu,
-// ruutujen symmetrisyys, kananmuna, räjähdys,
-// jos vinokulmasta aukeaa nolla, avaa sen ympäristökin
+// ruutujen symmetrisyys, kananmuna
 // Selvitä bugit: joskus ei aukea kunnolla avatessa tyhjää 64
 /**
  * Luokka luo peli-ikkunan ja suorittaa pelin ja käyttäjän väliseen
@@ -66,7 +65,7 @@ public class Kayttoliittyma extends JFrame {
         kuusi = new ImageIcon(getClass().getResource("Kuvat/kuusi.png"));
         seitseman = new ImageIcon(getClass().getResource("Kuvat/seitseman.png"));
         kahdeksan = new ImageIcon(getClass().getResource("Kuvat/kahdeksan.png"));
-        boom = new ImageIcon(getClass().getResource("Kuvat/rajahdys.png"));
+        boom = new ImageIcon(getClass().getResource("Kuvat/rajahdys2.png"));
 
         // Nappulat
         reset = new JButton(harakka);
@@ -77,9 +76,9 @@ public class Kayttoliittyma extends JFrame {
         normi = new JButton("M");
         normi.setFocusPainted(false);
         iso = new JButton("L");
-        iso.setFocusPainted(false);        
+        iso.setFocusPainted(false);
         pelinKoko = 9;
-        
+
         // Miinamittari
         miinamittari = new JTextField();
 
@@ -109,7 +108,7 @@ public class Kayttoliittyma extends JFrame {
     private void aloitaPeli() {
 
         napukat = new HashMap<String, JButton>();
-        
+
         if (onkoEkaKrt) {
             onkoEkaKrt = false;
             ruudukkopaneeli = teeRuudukkopaneeli();
@@ -121,12 +120,12 @@ public class Kayttoliittyma extends JFrame {
             this.setBounds(300, 300, 200, 200);
             this.setResizable(false);
             this.setVisible(true);
-            
+
         } else {
             this.remove(ruudukkopaneeli);
             ruudukkopaneeli = teeRuudukkopaneeli();
             this.add("Center", ruudukkopaneeli);
-        }        
+        }
 
         for (int i = 0; i < pelinKoko * pelinKoko; i++) {
             hiirikuuntelijatRuudukolle(i);
@@ -163,7 +162,7 @@ public class Kayttoliittyma extends JFrame {
         aika.seis();
         return paljastaKentta(avain);
     }
-    
+
     public void lippumittari() {
         int miinat = logiikka.getMiinamaara();
     }
@@ -373,7 +372,7 @@ public class Kayttoliittyma extends JFrame {
             return seitseman;
         } else if (mikaRuutu == 7) {
             return kahdeksan;
-        }
+        } 
         return null;
     }
 
@@ -426,15 +425,15 @@ public class Kayttoliittyma extends JFrame {
 
                 // Jos ruudussa ei lippua ja HIIRI1, se aukeaa
                 if (e.getButton() == MouseEvent.BUTTON1
-                        && nappula.getIcon() != lippu && nappula.isEnabled()) { 
-                    
+                        && nappula.getIcon() != lippu && nappula.isEnabled()) {
+
                     if (ekaKlikkaus) {
                         ekaKlikkaus = false;
                         aika.aloita();
                     }
                     nappula.setIcon(asetaKuvaAvattuun(indeksi, nappula));
                     nappula.setEnabled(false);
-                    nappula.setDisabledIcon(asetaKuvaAvattuun(indeksi, nappula));                    
+                    nappula.setDisabledIcon(asetaKuvaAvattuun(indeksi, nappula));
                     tilannekatsaus();
 
                 } // Jos ruutu tyhjä ja HIIRI3, niin ruutuun lippu
@@ -539,7 +538,7 @@ public class Kayttoliittyma extends JFrame {
     private JPanel teeYlapaneeli() {
 
         JPanel ylapaneeli = new JPanel(new FlowLayout());
-        Font f = new Font("Helvetica", Font.BOLD, 14);        
+        Font f = new Font("Helvetica", Font.BOLD, 14);
         miinamittari.setFont(f);
         miinamittari.setEditable(false);
         miinamittari.setColumns(2);

@@ -51,14 +51,15 @@ public class Ajastin extends JFrame implements ActionListener {
      */
     public void resetoi() {
         sekunnit = 1;
-        aikakentta.setText("0");
+        aikakentta.setText("0");        
     }
 
     /**
      * Käynnistää ajastimen.
      */
     public void aloita() {        
-            ajastin.start();          
+            ajastin.start();  
+            lopetus = false;
     }
 
     /**
