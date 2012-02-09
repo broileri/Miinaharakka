@@ -1,7 +1,6 @@
 
 package toimintalogiikka;
 import grafiikat.Kayttoliittyma;
-import javax.swing.JFrame;
 
 
 public class Main {
