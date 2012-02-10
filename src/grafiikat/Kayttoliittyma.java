@@ -163,10 +163,6 @@ public class Kayttoliittyma extends JFrame {
         return paljastaKentta(avain);
     }
 
-    public void lippumittari() {
-        int miinat = logiikka.getMiinamaara();
-    }
-
     /**
      * Paljastaa koko pelialueen miinat, tyhjät ja numerot.
      */
