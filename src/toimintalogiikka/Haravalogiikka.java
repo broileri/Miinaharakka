@@ -33,6 +33,7 @@ public class Haravalogiikka {
         luoRuudukko(koko);
         laitaMiinatRuudukkoon(koko, maaritaMiinamaara(koko));
         laitaNumerotRuudukkoon();
+        
         testaaRuudukkoa();
     }
 
@@ -264,6 +265,23 @@ public class Haravalogiikka {
                 }
             }
         }
+    }
+    
+    // Testimetodi bugin selvittämiseksi
+    public void bugikentta() {
+        
+        int[][] apuva = {
+        {0, 1, -1, 1, 2, -1, 4, -1, 1},
+        {0, 1, 1, 2, 3, -1, -1, 3, 2}, 
+        {0, 0, 0, 1, -1, 3, 3, -1, 1},
+        {1, 1, 0, 1, 1, 1, 1, 1, 1},
+        {-1, 2, 1, 0, 0, 0, 0, 0, 0},
+        {2, -1, 1, 0, 1, 1, 1, 0, 0},
+        {1, 1, 1, 0, 1, -1, 1, 0, 0},
+        {0, 0, 0, 0, 1, 1, 1, 0, 0},
+        {0, 0, 0, 0, 0, 0, 0, 0, 0}};
+        
+        miinakentta = apuva;
     }
 
     // Testimetodi ohjelmoinnin helpottamiseksi

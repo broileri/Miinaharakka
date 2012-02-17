@@ -13,7 +13,7 @@ import toimintalogiikka.Ruutu;
 // TO DO
 // High score?, kuvat liputetuille miinoille?, kuolleen harakan parantelu,
 // ruutujen symmetrisyys, kananmuna
-// Selvitä bugit: joskus ei aukea kunnolla avatessa tyhjää 64
+// Selvitä bugit: JEEEEEEEEE TOIMII!!!!! Kannattaisiko HashMapIndekseihin tallentamista säätää?
 /**
  * Luokka luo peli-ikkunan ja suorittaa pelin ja käyttäjän väliseen
  * kanssakäyntiin liittyviä operaatioita.
@@ -107,17 +107,34 @@ public class Kayttoliittyma extends JFrame {
      */
     private void aloitaPeli() {
 
+        reset.setIcon(harakka);
         napukat = new HashMap<String, JButton>();
 
         if (onkoEkaKrt) {
             onkoEkaKrt = false;
             ruudukkopaneeli = teeRuudukkopaneeli();
 
-            // Paneelien lisääminen pelikenttään        
-            this.setLayout(new BorderLayout(10, 10));
+            // Paneelien lisääminen pelikenttään 
+            
+            BorderLayout leiautti = new BorderLayout(10, 10);
+            leiautti.setVgap(10);
+            JPanel vas = new JPanel();
+            vas.setSize(30, WIDTH);
+            JPanel oik = new JPanel();
+            oik.setSize(30, WIDTH);
+            JPanel ala = new JPanel();
+            ala.setSize(WIDTH, 15);
+            this.setLayout(leiautti);
+            this.setBackground(Color.blue);
+            
+            
+            //this.setLayout(new BorderLayout(10, 10));
+            this.add("West", vas);
             this.add("Center", ruudukkopaneeli);
+            this.add("East", oik);
+            this.add("South", ala);
             this.add("North", teeYlapaneeli());
-            this.setBounds(300, 300, 200, 200);
+            this.setBounds(300, 300, 300, 300);
             this.setResizable(false);
             this.setVisible(true);
 
@@ -222,8 +239,8 @@ public class Kayttoliittyma extends JFrame {
     public void avaaTyhjienReunat(int[] x, int[] y) {
 
         int[][] miinakentta = logiikka.getRuudukko();
-        int[] hashMapIndeksit = new int[x.length];
-        for (int i = 0; i < x.length; i++) {
+        int[] hashMapIndeksit = new int[pelinKoko*pelinKoko*8];
+        for (int i = 0; i < pelinKoko*pelinKoko*8; i++) {
             hashMapIndeksit[i] = -9;
         }
         int indeksi = 0;
@@ -231,12 +248,11 @@ public class Kayttoliittyma extends JFrame {
         for (int i = 0; i < x.length; i++) {
 
             if (x[i] != -9) {
-
+                                
                 // Ylä
                 if (logiikka.onkoRuudukossa(x[i] - 1, y[i] - 1)) {
                     if (miinakentta[x[i] - 1][y[i] - 1] != 9) {
                         hashMapIndeksit[indeksi] = teeIndeksi(x[i] - 1, y[i] - 1);
-                        //HUOM - virhe x[] ja y[] saattavat hakea indeksistä -1!!!
                         indeksi++;
                     }
                 }
