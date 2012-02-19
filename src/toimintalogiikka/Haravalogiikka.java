@@ -33,8 +33,6 @@ public class Haravalogiikka {
         luoRuudukko(koko);
         laitaMiinatRuudukkoon(koko, maaritaMiinamaara(koko));
         laitaNumerotRuudukkoon();
-        
-        testaaRuudukkoa();
     }
 
     /**
@@ -91,7 +89,9 @@ public class Haravalogiikka {
         Random arpoja = new Random();
         int talletusindeksi = 0;
         for (int i = miinamaara; i > 0; i--) {
-            while (true) { // Pitää huolen, ettei samaan kohtaan tule kahdesti miinaa
+            
+            while (true) {
+                // Pitää huolen, ettei samaan kohtaan tule kahdesti miinaa
                 int x = arpoja.nextInt(koko - 1);
                 int y = arpoja.nextInt(koko - 1);
                 if (miinakentta[x][y] == 0) {
@@ -177,7 +177,7 @@ public class Haravalogiikka {
     }
 
     /**
-     * Palauttaa tyhjien ruutujen x-koordinaatit.
+     * Palauttaa tyhjien ruutujen x-koordinaatit int-tauluna.
      *
      * @return
      */
@@ -186,7 +186,7 @@ public class Haravalogiikka {
     }
 
     /**
-     * Palauttaa tyhjien ruutujen y-koordinaatit.
+     * Palauttaa tyhjien ruutujen y-koordinaatit int-tauluna.
      *
      * @return
      */
@@ -200,13 +200,11 @@ public class Haravalogiikka {
     public int getMiinamaara() {
         return (maaritaMiinamaara(ruudukonSivu));
     }
-
-    // Jos annettu ruutu on tyhjä, merkitsee sen ja sitä ympäröivät tyhjät
-    // ruudut 9:llä. Flood-fill.
+ 
     /**
      * Jos annettu ruutu on tyhjä, metodi merkitsee sen ja sitä ympäröivät
      * tyhjät ruudut yhdeksiköillä. 9 tarkoittaa tyhjää, avattavaa ruutua.
-     * Toimii kuin flood fill -algoritmi. *
+     * Toimii kuin Flood fill -algoritmi.
      *
      * @param miinakentta Miinakenttä, int[][]
      * @param r Ruutu-apuluokkaa käyttäen annettu ruudun sijainti.
@@ -266,25 +264,9 @@ public class Haravalogiikka {
             }
         }
     }
-    
-    // Testimetodi bugin selvittämiseksi
-    public void bugikentta() {
-        
-        int[][] apuva = {
-        {0, 1, -1, 1, 2, -1, 4, -1, 1},
-        {0, 1, 1, 2, 3, -1, -1, 3, 2}, 
-        {0, 0, 0, 1, -1, 3, 3, -1, 1},
-        {1, 1, 0, 1, 1, 1, 1, 1, 1},
-        {-1, 2, 1, 0, 0, 0, 0, 0, 0},
-        {2, -1, 1, 0, 1, 1, 1, 0, 0},
-        {1, 1, 1, 0, 1, -1, 1, 0, 0},
-        {0, 0, 0, 0, 1, 1, 1, 0, 0},
-        {0, 0, 0, 0, 0, 0, 0, 0, 0}};
-        
-        miinakentta = apuva;
-    }
 
-    // Testimetodi ohjelmoinnin helpottamiseksi
+    // Testimetodi ohjelman muokkaamisen helpottamiseksi
+    /*
     public void testaaRuudukkoa() {
 
         // Miltä ruudukko näyttää
@@ -317,4 +299,6 @@ public class Haravalogiikka {
         System.out.println("True: " + onkoRuudukossa(8, 0));
         System.out.println("True: " + onkoRuudukossa(0, 8));
     }
+    * 
+    */
 }
