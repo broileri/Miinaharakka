@@ -54,7 +54,7 @@ public class Kayttoliittyma extends JFrame {
         hvoitto = new ImageIcon(getClass().getResource("Kuvat/miinaharakkajee2.png"));
         hkuolema = new ImageIcon(getClass().getResource("Kuvat/miinaharakkakuol2.png"));
         miina = new ImageIcon(getClass().getResource("Kuvat/miina2.png"));
-        lippu = new ImageIcon(getClass().getResource("Kuvat/lippu3.png"));
+        lippu = new ImageIcon(getClass().getResource("Kuvat/lippu4.png"));
         kysymys = new ImageIcon(getClass().getResource("Kuvat/kysymys.png"));
         yksi = new ImageIcon(getClass().getResource("Kuvat/yksi.png"));
         kaksi = new ImageIcon(getClass().getResource("Kuvat/kaksi.png"));
