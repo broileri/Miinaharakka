@@ -11,7 +11,7 @@ import toimintalogiikka.Haravalogiikka;
 import toimintalogiikka.Ruutu;
 
 // TO DO
-// miinan auetessa merkatut miinat ok:ksi
+// javadoc, dokumentit
 
 /**
  * Luokka luo peli-ikkunan ja suorittaa pelin ja käyttäjän väliseen
@@ -54,7 +54,7 @@ public class Kayttoliittyma extends JFrame {
         hvoitto = new ImageIcon(getClass().getResource("Kuvat/miinaharakkajee2.png"));
         hkuolema = new ImageIcon(getClass().getResource("Kuvat/miinaharakkakuol2.png"));
         miina = new ImageIcon(getClass().getResource("Kuvat/miina2.png"));
-        lippu = new ImageIcon(getClass().getResource("Kuvat/lippu2.png"));
+        lippu = new ImageIcon(getClass().getResource("Kuvat/lippu3.png"));
         kysymys = new ImageIcon(getClass().getResource("Kuvat/kysymys.png"));
         yksi = new ImageIcon(getClass().getResource("Kuvat/yksi.png"));
         kaksi = new ImageIcon(getClass().getResource("Kuvat/kaksi.png"));
@@ -123,19 +123,18 @@ public class Kayttoliittyma extends JFrame {
             JPanel oik = new JPanel();
             oik.setSize(40, WIDTH);
             JPanel ala = new JPanel();
-            ala.setSize(WIDTH, 15); 
-            this.setLayout(leiautti);            
+            ala.setSize(WIDTH, 15);
+            this.setLayout(leiautti);
 
             this.add("West", vas);
             this.add("Center", ruudukkopaneeli);
             this.add("East", oik);
             this.add("South", ala);
             this.add("North", teeYlapaneeli());
-            this.setBounds(330, 150, 300, 300);            
+            this.setBounds(330, 150, 300, 300);
             this.setResizable(false);
             this.setVisible(true);
-        } 
-        // Uusi peli käynnistyksen jälkeen
+        } // Uusi peli käynnistyksen jälkeen
         else {
             this.remove(ruudukkopaneeli);
             ruudukkopaneeli = teeRuudukkopaneeli();
@@ -150,7 +149,7 @@ public class Kayttoliittyma extends JFrame {
         lippumaara = logiikka.getMiinamaara();
         miinamittari.setText(Integer.toString(lippumaara));
         ekaKlikkaus = true;
-        this.pack();        
+        this.pack();
     }
 
     /**
@@ -163,7 +162,7 @@ public class Kayttoliittyma extends JFrame {
     public void voitto() {
         reset.setIcon(hvoitto);
         aika.seis();
-        paljastaKentta(1000);
+        paljastaKentta(1000); // 1000 tarkoittaa tyhjää avainta
         miinamittari.setText("0");
     }
 
@@ -192,19 +191,20 @@ public class Kayttoliittyma extends JFrame {
             haeIndeksi(i);
             int mikaRuutu = miinakentta[ax][yy];
 
-            // Miina             
+            // Miina 
+            // Voitto
             if (mikaRuutu == -1 && avainJosTappio == 1000) {
                 napukat.get(i).setIcon(okmiina);
                 napukat.get(i).setDisabledIcon(okmiina);
-            } 
-            else if (mikaRuutu == -1 ) {
+            } // Total fail
+            else if (mikaRuutu == -1) {
                 napukat.get(i).setIcon(miina);
                 napukat.get(i).setDisabledIcon(miina);
-            }// Numero
+            } // Numero
             else {
                 napukat.get(i).setIcon(numeroruudunAvaus(mikaRuutu));
                 napukat.get(i).setDisabledIcon(numeroruudunAvaus(mikaRuutu));
-            }            
+            }
             napukat.get(i).setEnabled(false);
         }
         if (avainJosTappio != 1000) {
@@ -214,8 +214,8 @@ public class Kayttoliittyma extends JFrame {
     }
 
     /**
-     * Tarkastaa, onko peli voitettu. 
-     * Jos ruutuja on auki pelin ruutujen määrä - miinamäärä, peli on voitettu.
+     * Tarkastaa, onko peli voitettu. Jos ruutuja on auki pelin ruutujen määrä
+     * miinus miinamäärä, peli on voitettu.
      */
     private void tilannekatsaus() {
 
@@ -242,8 +242,8 @@ public class Kayttoliittyma extends JFrame {
     public void avaaTyhjienReunat(int[] x, int[] y) {
 
         int[][] miinakentta = logiikka.getRuudukko();
-        int[] hashMapIndeksit = new int[pelinKoko*pelinKoko*8];
-        for (int i = 0; i < pelinKoko*pelinKoko*8; i++) {
+        int[] hashMapIndeksit = new int[pelinKoko * pelinKoko * 8];
+        for (int i = 0; i < pelinKoko * pelinKoko * 8; i++) {
             hashMapIndeksit[i] = -9;
         }
         int indeksi = 0;
@@ -251,7 +251,7 @@ public class Kayttoliittyma extends JFrame {
         for (int i = 0; i < x.length; i++) {
 
             if (x[i] != -9) {
-                                
+
                 // Ylä
                 if (logiikka.onkoRuudukossa(x[i] - 1, y[i] - 1)) {
                     if (miinakentta[x[i] - 1][y[i] - 1] != 9) {
@@ -309,9 +309,11 @@ public class Kayttoliittyma extends JFrame {
             if (hashMapIndeksit[i] != -9) {
                 JButton nappi = napukat.get(hashMapIndeksit[i]);
                 haeIndeksi(hashMapIndeksit[i]);
-                nappi.setIcon(numeroruudunAvaus(miinakentta[ax][yy]));
-                nappi.setEnabled(false);
-                nappi.setDisabledIcon(numeroruudunAvaus(miinakentta[ax][yy]));
+                if (nappi.getIcon() == null) {
+                    nappi.setIcon(numeroruudunAvaus(miinakentta[ax][yy]));
+                    nappi.setEnabled(false);
+                    nappi.setDisabledIcon(numeroruudunAvaus(miinakentta[ax][yy]));
+                }
             }
         }
     }
@@ -329,7 +331,7 @@ public class Kayttoliittyma extends JFrame {
      * @see grafiikat.Kayttoliittyma#numeroruudunAvaus(int)
      */
     private ImageIcon asetaKuvaAvattuun(int indeksi) {
-        
+
         int[][] miinakentta = logiikka.getRuudukko();
         haeIndeksi(indeksi);
         int mikaRuutu = miinakentta[ax][yy];
@@ -349,7 +351,10 @@ public class Kayttoliittyma extends JFrame {
             for (int i = 0; i < xAuki.length; i++) {
                 if (xAuki[i] != -9 && yAuki[i] != -9) {
                     int nappiIndeksi = teeIndeksi(xAuki[i], yAuki[i]);
-                    napukat.get(nappiIndeksi).setEnabled(false);
+                    if (napukat.get(nappiIndeksi).getIcon() == null) {
+                        napukat.get(nappiIndeksi).setEnabled(false);
+                        napukat.get(nappiIndeksi).setIcon(null);
+                    }
                 }
             }
             // Tyhjien ruutujen reunojen avaus
@@ -388,7 +393,7 @@ public class Kayttoliittyma extends JFrame {
             return seitseman;
         } else if (mikaRuutu == 7) {
             return kahdeksan;
-        } 
+        }
         return null;
     }
 
@@ -439,6 +444,7 @@ public class Kayttoliittyma extends JFrame {
             @Override
             public void mouseReleased(MouseEvent e) {
 
+
                 // Jos ruudussa ei lippua ja HIIRI1, se aukeaa
                 if (e.getButton() == MouseEvent.BUTTON1
                         && nappula.getIcon() != lippu && nappula.isEnabled()) {
@@ -453,18 +459,21 @@ public class Kayttoliittyma extends JFrame {
                     tilannekatsaus();
 
                 } // Jos ruutu tyhjä ja HIIRI3, niin ruutuun lippu
-                else if (e.getButton() == MouseEvent.BUTTON3 && nappula.getIcon() == null) {
+                else if (e.getButton() == MouseEvent.BUTTON3 && nappula.getIcon() == null
+                        && nappula.isEnabled()) {
                     nappula.setIcon(lippu);
                     lippumaara--;
                     miinamittari.setText(Integer.toString(lippumaara));
 
                 } // Jos ruudussa lippu ja HIIRI3, ruutuun ? 
-                else if (e.getButton() == MouseEvent.BUTTON3 && nappula.getIcon() == lippu) {
+                else if (e.getButton() == MouseEvent.BUTTON3 && nappula.getIcon() == lippu
+                        && nappula.isEnabled()) {
                     nappula.setIcon(kysymys);
                     lippumaara++;
                     miinamittari.setText(Integer.toString(lippumaara));
                 } // Jos ruudussa ? ja HIIRI3, ruutu tyhjäksi
-                else if (e.getButton() == MouseEvent.BUTTON3 && nappula.getIcon() == kysymys) {
+                else if (e.getButton() == MouseEvent.BUTTON3 && nappula.getIcon() == kysymys
+                        && nappula.isEnabled()) {
                     nappula.setIcon(null);
                 }
 
@@ -537,7 +546,7 @@ public class Kayttoliittyma extends JFrame {
 
         ruudukkopaneeli = new JPanel(new GridLayout(pelinKoko, pelinKoko));
         teeNappeja(pelinKoko * pelinKoko);
-        for (int i = 0; i < napukat.size(); i++) {            
+        for (int i = 0; i < napukat.size(); i++) {
             napukat.get(i).setEnabled(true);
             ruudukkopaneeli.add(napukat.get(i));
         }
@@ -574,10 +583,10 @@ public class Kayttoliittyma extends JFrame {
      * @param lkm Haluttu JButtonien määrä
      */
     private void teeNappeja(int lkm) {
-        
+
         JButton nappula;
 
-        for (int i = 0; i < lkm; i++) {            
+        for (int i = 0; i < lkm; i++) {
             nappula = new JButton();
             nappula.setPreferredSize(new Dimension(30, 30));
             nappula.setFocusPainted(false);
