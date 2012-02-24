@@ -11,7 +11,7 @@ import toimintalogiikka.Haravalogiikka;
 import toimintalogiikka.Ruutu;
 
 // TO DO
-// javadoc, dokumentit
+// päivitä javadoc, luokkakaavio, sekvenssikaavio
 
 /**
  * Luokka luo peli-ikkunan ja suorittaa pelin ja käyttäjän väliseen
