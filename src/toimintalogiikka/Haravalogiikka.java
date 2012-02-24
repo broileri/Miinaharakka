@@ -5,7 +5,7 @@ import java.util.Queue;
 import java.util.Random;
 
 /**
- * Luokka luo sijainnit pelikentällä oleville miinoille, numeroille ja tyhjille
+ * Luokka luo pelikentän ja sijainnit pelikentällä oleville miinoille, numeroille ja tyhjille
  * ruuduille.
  *
  * @author Broileri
@@ -13,26 +13,24 @@ import java.util.Random;
 public class Haravalogiikka {
 
     private int[][] miinakentta;   
-    private Ruutu[] miinat, tyhjat;
+    private Ruutu[] tyhjat;
     private int ruudukonSivu;
 
     /**
-     * Luo uudet pelisijainnit.
+     * Luo uuden pelin.
      *
-     * @param koko Annettu koko, joka on 9, 16 tai 22.
+     * @param koko Ruudukon sivun pituus, joka on 9, 16 tai 22.
      *
      * @see toimintalogiikka.Haravalogiikka#luoRuudukko(int)
-     * @see toimintalogiikka.Haravalogiikka#laitaMiinatRuudukkoon(int,
-     * maaritaMiinamaara(int))
+     * @see toimintalogiikka.Haravalogiikka#laitaMiinatRuudukkoon(int, int)
      * @see toimintalogiikka.Haravalogiikka#laitaNumerotRuudukkoon()
      * @see toimintalogiikka.Haravalogiikka#maaritaMiinamaara(int)
      */
     public Haravalogiikka(int koko) {
         ruudukonSivu = koko;
         luoRuudukko(koko);
-        laitaMiinatRuudukkoon(koko, maaritaMiinamaara(koko));
-        laitaNumerotRuudukkoon();
-        // testaaRuudukkoa();
+        //laitaMiinatRuudukkoon(koko, maaritaMiinamaara(koko));
+        laitaNumerotRuudukkoon(laitaMiinatRuudukkoon(koko, maaritaMiinamaara(koko)));
     }
 
     /**
@@ -80,9 +78,9 @@ public class Haravalogiikka {
      * @param koko Ruudukon sivun pituus.
      * @param miinamaara Miinojen lukumäärä.
      */
-    private void laitaMiinatRuudukkoon(int koko, int miinamaara) {
+    private Ruutu[] laitaMiinatRuudukkoon(int koko, int miinamaara) {
         
-        miinat = new Ruutu[miinamaara];
+        Ruutu[] miinat = new Ruutu[miinamaara];
 
         // Miinojen sijainnin arvonta ja asettaminen
         Random arpoja = new Random();
@@ -101,6 +99,7 @@ public class Haravalogiikka {
                 }
             }
         }
+        return miinat;
     }
 
     /**
@@ -110,9 +109,10 @@ public class Haravalogiikka {
      *
      * @see toimintalogiikka.Haravalogiikka#onkoRuudukossa(int, int)
      */
-    private void laitaNumerotRuudukkoon() {
+    private void laitaNumerotRuudukkoon(Ruutu[] miinat) {
+        
         int x, y;
-
+        
         for (int i = 0; i < miinat.length; i++) {
             x = miinat[i].getX();
             y = miinat[i].getY();
@@ -192,7 +192,7 @@ public class Haravalogiikka {
     /**
      * Jos annettu ruutu on tyhjä, metodi merkitsee sen ja sitä ympäröivät
      * tyhjät ruudut yhdeksiköillä. 9 tarkoittaa tyhjää, avattavaa ruutua.
-     * Toimii kuin Flood fill -algoritmi.
+     * Flood fill -periaate.
      *
      * @param miinakentta Miinakenttä, int[][]
      * @param r Ruutu-apuluokkaa käyttäen annettu ruudun sijainti.
@@ -205,7 +205,7 @@ public class Haravalogiikka {
         tyhjat = new Ruutu[koko*koko];
 
         for (int i = 0; i < tyhjat.length; i++) {            
-            tyhjat[i] = new Ruutu(-9, -9);
+            tyhjat[i] = new Ruutu(-9, -9); // -9 tarkoittaa paikkaa, johon ei ole tallennettu mitään
         }
 
         Queue<Ruutu> jono = new LinkedList<Ruutu>();
@@ -249,40 +249,5 @@ public class Haravalogiikka {
                 }
             }
         }
-    }
-
-    // Testimetodi ohjelman muokkaamisen helpottamiseksi
-    
-    public void testaaRuudukkoa() {
-
-        // Miltä ruudukko näyttää
-        String testi = "";
-        for (int i = 0; i < miinakentta.length; i++) {
-            for (int j = 0; j < miinakentta.length; j++) {
-                testi += miinakentta[i][j] + " ";
-                if (miinakentta[i][j] != -1) {
-                    testi += " ";
-                }
-                if (j == miinakentta.length - 1) {
-                    testi += "\n";
-                }
-            }
-        }
-        System.out.println(testi);
-
-        // Miinojen sijainnit (x, y)-koordinaatteina
-        System.out.println("Miinat ovat kohdissa:");
-        String kohdat = "";
-
-        for (int m = 0; m < miinat.length; m++) {
-            kohdat += "(" + miinat[m].getX() + ", " + miinat[m].getY() + ")";
-        }
-        System.out.println(kohdat);
-
-        // Toimiiko onkoRuudukossa(x, y)
-        System.out.println("False: " + onkoRuudukossa(9, 0));
-        System.out.println("False: " + onkoRuudukossa(-2, 3));
-        System.out.println("True: " + onkoRuudukossa(8, 0));
-        System.out.println("True: " + onkoRuudukossa(0, 8));
-    }    
+    }  
 }

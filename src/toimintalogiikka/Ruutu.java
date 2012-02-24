@@ -16,20 +16,12 @@ public class Ruutu {
     public Ruutu(int ax, int yy) {
         x = ax;
         y = yy;
-    }
-    
-    /**
-     * Palauttaa x-koordinaatin.
-     * @return 
-     */
+    }    
+ 
     public int getX() {
         return x;
-    }
-    
-    /**
-     * Palauttaa y-koordinaatin.
-     * @return 
-     */
+    }    
+   
     public int getY() {
         return y;
     }
