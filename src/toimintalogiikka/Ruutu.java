@@ -33,4 +33,12 @@ public class Ruutu {
     public int getY() {
         return y;
     }
+    
+    public void setX(int ax) {
+        x = ax;
+    }
+    
+    public void setY(int yy) {
+        y = yy;
+    }
 }

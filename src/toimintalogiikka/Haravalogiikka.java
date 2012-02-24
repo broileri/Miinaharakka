@@ -12,9 +12,8 @@ import java.util.Random;
  */
 public class Haravalogiikka {
 
-    private int[][] miinakentta;
-    private int[] miinatX, miinatY;
-    private int[] tyhjatY, tyhjatX;
+    private int[][] miinakentta;   
+    private Ruutu[] miinat, tyhjat;
     private int ruudukonSivu;
 
     /**
@@ -82,9 +81,8 @@ public class Haravalogiikka {
      * @param miinamaara Miinojen lukumäärä.
      */
     private void laitaMiinatRuudukkoon(int koko, int miinamaara) {
-
-        miinatX = new int[miinamaara];
-        miinatY = new int[miinamaara];
+        
+        miinat = new Ruutu[miinamaara];
 
         // Miinojen sijainnin arvonta ja asettaminen
         Random arpoja = new Random();
@@ -97,8 +95,7 @@ public class Haravalogiikka {
                 int y = arpoja.nextInt(koko - 1);
                 if (miinakentta[x][y] == 0) {
                     miinakentta[x][y] = -1; // -1 tarkoittaa miinaa
-                    miinatX[talletusindeksi] = x;
-                    miinatY[talletusindeksi] = y;
+                    miinat[talletusindeksi] = new Ruutu(x, y);
                     talletusindeksi++;
                     break;
                 }
@@ -116,9 +113,9 @@ public class Haravalogiikka {
     private void laitaNumerotRuudukkoon() {
         int x, y;
 
-        for (int i = 0; i < miinatX.length; i++) {
-            x = miinatX[i];
-            y = miinatY[i];
+        for (int i = 0; i < miinat.length; i++) {
+            x = miinat[i].getX();
+            y = miinat[i].getY();
 
             // Yläruudut
             if (onkoRuudukossa(x - 1, y - 1) && miinakentta[x - 1][y - 1] != -1) {
@@ -178,21 +175,11 @@ public class Haravalogiikka {
     }
 
     /**
-     * Palauttaa tyhjien ruutujen x-koordinaatit int-tauluna.
-     *
-     * @return
+     * Palauttaa taulukon tyhjistä ruuduista.
+     * @return 
      */
-    public int[] getTyhjatX() {
-        return tyhjatX;
-    }
-
-    /**
-     * Palauttaa tyhjien ruutujen y-koordinaatit int-tauluna.
-     *
-     * @return
-     */
-    public int[] getTyhjatY() {
-        return tyhjatY;
+    public Ruutu[] getTyhjat() {
+        return tyhjat;
     }
 
     /**
@@ -214,13 +201,11 @@ public class Haravalogiikka {
      */
     public void etsiTyhjat(int[][] miinakentta, Ruutu r) {
 
-        int index = 0, koko = miinakentta.length - 1;
-        tyhjatX = new int[koko * koko];
-        tyhjatY = new int[koko * koko];
+        int index = 0, koko = miinakentta.length - 1;        
+        tyhjat = new Ruutu[koko*koko];
 
-        for (int i = 0; i < tyhjatX.length; i++) {
-            tyhjatX[i] = -9;
-            tyhjatY[i] = -9;
+        for (int i = 0; i < tyhjat.length; i++) {            
+            tyhjat[i] = new Ruutu(-9, -9);
         }
 
         Queue<Ruutu> jono = new LinkedList<Ruutu>();
@@ -233,9 +218,9 @@ public class Haravalogiikka {
             if (miinakentta[x][y] == 0) {
                 miinakentta[x][y] = 9;
 
-                // Avattavien tallennus
-                tyhjatX[index] = x;
-                tyhjatY[index] = y;
+                // Avattavien tallennus                
+                tyhjat[index].setX(x);
+                tyhjat[index].setY(y);
                 index++;
 
                 if (onkoRuudukossa(x, y - 1)) {
@@ -289,8 +274,8 @@ public class Haravalogiikka {
         System.out.println("Miinat ovat kohdissa:");
         String kohdat = "";
 
-        for (int m = 0; m < miinatX.length; m++) {
-            kohdat += "(" + miinatX[m] + ", " + miinatY[m] + ")";
+        for (int m = 0; m < miinat.length; m++) {
+            kohdat += "(" + miinat[m].getX() + ", " + miinat[m].getY() + ")";
         }
         System.out.println(kohdat);
 
