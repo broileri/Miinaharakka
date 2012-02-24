@@ -11,8 +11,9 @@ import toimintalogiikka.Haravalogiikka;
 import toimintalogiikka.Ruutu;
 
 // TO DO
-// päivitä javadoc, luokkakaavio, sekvenssikaavio
-
+// päivitä javadoc, luokkakaavio, sekvenssikaavio, testidokki
+// Enum --> Ruutu, saisi esim. tyhjätX[] pois? Ks. esim. OhMa s2011
+// Käyttiksen pilkkominen?
 /**
  * Luokka luo peli-ikkunan ja suorittaa pelin ja käyttäjän väliseen
  * kanssakäyntiin liittyviä operaatioita.
@@ -54,7 +55,7 @@ public class Kayttoliittyma extends JFrame {
         hvoitto = new ImageIcon(getClass().getResource("Kuvat/miinaharakkajee2.png"));
         hkuolema = new ImageIcon(getClass().getResource("Kuvat/miinaharakkakuol2.png"));
         miina = new ImageIcon(getClass().getResource("Kuvat/miina2.png"));
-        lippu = new ImageIcon(getClass().getResource("Kuvat/lippu4.png"));
+        lippu = new ImageIcon(getClass().getResource("Kuvat/lippu3.png"));
         kysymys = new ImageIcon(getClass().getResource("Kuvat/kysymys.png"));
         yksi = new ImageIcon(getClass().getResource("Kuvat/yksi.png"));
         kaksi = new ImageIcon(getClass().getResource("Kuvat/kaksi.png"));
@@ -113,28 +114,9 @@ public class Kayttoliittyma extends JFrame {
         // Käynnistyksen yhteydessä säädettävät asetukset
         if (onkoEkaKrt) {
             onkoEkaKrt = false;
-            ruudukkopaneeli = teeRuudukkopaneeli();
-
-            // Paneelien lisääminen pelikenttään             
-            BorderLayout leiautti = new BorderLayout(10, 10);
-            leiautti.setVgap(10);
-            JPanel vas = new JPanel();
-            vas.setSize(30, WIDTH);
-            JPanel oik = new JPanel();
-            oik.setSize(40, WIDTH);
-            JPanel ala = new JPanel();
-            ala.setSize(WIDTH, 15);
-            this.setLayout(leiautti);
-
-            this.add("West", vas);
-            this.add("Center", ruudukkopaneeli);
-            this.add("East", oik);
-            this.add("South", ala);
-            this.add("North", teeYlapaneeli());
-            this.setBounds(330, 150, 300, 300);
-            this.setResizable(false);
-            this.setVisible(true);
-        } // Uusi peli käynnistyksen jälkeen
+            ekaPeli();
+        } 
+        // Uusi peli (ensimmäisen käynnistyksen jälkeen)
         else {
             this.remove(ruudukkopaneeli);
             ruudukkopaneeli = teeRuudukkopaneeli();
@@ -150,6 +132,35 @@ public class Kayttoliittyma extends JFrame {
         miinamittari.setText(Integer.toString(lippumaara));
         ekaKlikkaus = true;
         this.pack();
+    }
+    
+    /**
+     * Kun peli käynnistetään ensimmäistä kertaa, tämä metodi rakentaa
+     * peli-ikkunan.
+     */
+    public void ekaPeli() {
+        
+        ruudukkopaneeli = teeRuudukkopaneeli();
+
+        // Paneelien lisääminen pelikenttään             
+        BorderLayout leiautti = new BorderLayout(10, 10);
+        leiautti.setVgap(10);
+        JPanel vas = new JPanel();
+        vas.setSize(30, WIDTH);
+        JPanel oik = new JPanel();
+        oik.setSize(40, WIDTH);
+        JPanel ala = new JPanel();
+        ala.setSize(WIDTH, 15);
+        this.setLayout(leiautti);
+
+        this.add("West", vas);
+        this.add("Center", ruudukkopaneeli);
+        this.add("East", oik);
+        this.add("South", ala);
+        this.add("North", teeYlapaneeli());
+        this.setBounds(330, 150, 300, 300);
+        this.setResizable(false);
+        this.setVisible(true);
     }
 
     /**
@@ -215,7 +226,8 @@ public class Kayttoliittyma extends JFrame {
 
     /**
      * Tarkastaa, onko peli voitettu. Jos ruutuja on auki pelin ruutujen määrä
-     * miinus miinamäärä, peli on voitettu.
+     * miinus miinamäärä, peli on voitettu. Metodia kutsutaan aina ruudun avaamisen
+     * jälkeen.
      */
     private void tilannekatsaus() {
 
@@ -304,7 +316,22 @@ public class Kayttoliittyma extends JFrame {
                     }
                 }
             }
-        }
+        } 
+        ikonitTyhjienReunoille(hashMapIndeksit, miinakentta, indeksi);
+    }
+    
+    /**
+     * Metodi asettaa avaaTyhjienReunat-metodin määrittelemille ruuduille
+     * numerokuvakkeet.
+     * 
+     * @param hashMapIndeksit
+     * @param miinakentta
+     * @param indeksi 
+     * 
+     * @see grafiikat.Kayttoliittyma#avaaTyhjienReunat()
+     */
+    public void ikonitTyhjienReunoille(int[] hashMapIndeksit, int[][] miinakentta, int indeksi) {
+        
         for (int i = 0; i < indeksi; i++) {
             if (hashMapIndeksit[i] != -9) {
                 JButton nappi = napukat.get(hashMapIndeksit[i]);
@@ -486,6 +513,7 @@ public class Kayttoliittyma extends JFrame {
      */
     private void tapahtumakuuntelijatValikolle() {
 
+        // Reset-nappi
         reset.addActionListener(
                 new ActionListener() {
 
@@ -497,7 +525,7 @@ public class Kayttoliittyma extends JFrame {
                         aloitaPeli();
                     }
                 });
-
+        // S-nappi
         pieni.addActionListener(
                 new ActionListener() {
 
@@ -509,7 +537,7 @@ public class Kayttoliittyma extends JFrame {
                         aloitaPeli();
                     }
                 });
-
+        // M-nappi
         normi.addActionListener(
                 new ActionListener() {
 
@@ -521,7 +549,7 @@ public class Kayttoliittyma extends JFrame {
                         aloitaPeli();
                     }
                 });
-
+        // L-nappi
         iso.addActionListener(
                 new ActionListener() {
 

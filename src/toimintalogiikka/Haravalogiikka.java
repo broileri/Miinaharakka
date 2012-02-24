@@ -33,6 +33,7 @@ public class Haravalogiikka {
         luoRuudukko(koko);
         laitaMiinatRuudukkoon(koko, maaritaMiinamaara(koko));
         laitaNumerotRuudukkoon();
+        // testaaRuudukkoa();
     }
 
     /**
@@ -266,7 +267,7 @@ public class Haravalogiikka {
     }
 
     // Testimetodi ohjelman muokkaamisen helpottamiseksi
-    /*
+    
     public void testaaRuudukkoa() {
 
         // Miltä ruudukko näyttää
@@ -298,7 +299,5 @@ public class Haravalogiikka {
         System.out.println("False: " + onkoRuudukossa(-2, 3));
         System.out.println("True: " + onkoRuudukossa(8, 0));
         System.out.println("True: " + onkoRuudukossa(0, 8));
-    }
-    * 
-    */
+    }    
 }
