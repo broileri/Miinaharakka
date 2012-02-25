@@ -45,7 +45,7 @@ public class Kayttoliittyma extends JFrame {
      * @see grafiikat.Kayttoliittyma#lataaIkonit()
      * @see grafiikat.Kayttoliittyma#lataaNapit()
      * @see grafiikat.Kayttoliittyma#tapahtumakuuntelijatValikolle()
-     * @see grafiikat.Kayttoliittyma#aloitaPeli()
+     * @see grafiikat.Kayttoliittyma#aloitaPeli(boolean)
      */
     public Kayttoliittyma() {
 
@@ -197,7 +197,7 @@ public class Kayttoliittyma extends JFrame {
      * räjähdyskuvakkeen.
      *
      * @param avainJosTappio
-     * @return
+     * @return Räjähtävä miina tai null.
      */
     public ImageIcon paljastaKentta(int avainJosTappio) {
 
@@ -356,8 +356,7 @@ public class Kayttoliittyma extends JFrame {
      * tarvittaessa tyhjien ruutujen ja numeroruutujen avaamiseen tarkoitettuja
      * metodeja.
      *
-     * @param indeksi Annetun napin HashMap-avain.
-     * @param nappi Käyttäjän painama nappi.
+     * @param indeksi Annetun napin HashMap-avain.     
      * @return Ikoni (kuva tai tyhjä) avattuun ruutuun.
      *
      * @see grafiikat.Kayttoliittyma#avaaTyhjienReunat(Ruutu[] auki)
@@ -434,7 +433,7 @@ public class Kayttoliittyma extends JFrame {
      * Ruutuna.
      *
      * @param indeksi Nappi-HashMapin indeksi.
-     * @return
+     * @return Ruutu, jolla x- ja y-indeksi.
      */
     public Ruutu haeIndeksi(int indeksi) {
 
@@ -520,7 +519,7 @@ public class Kayttoliittyma extends JFrame {
      * Metodi luo valikon napeille tapahtumakuuntelijat.
      *
      * @see grafiikat.Ajastin
-     * @see grafiikat.Kayttoliittyma#aloitaPeli(false)
+     * @see grafiikat.Kayttoliittyma#aloitaPeli(boolean)
      * @see grafiikat.Kayttoliittyma#kuuntelijatKokoNappuloille(int pelinsivu,
      * JButton koko)
      */

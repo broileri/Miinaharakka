@@ -26,7 +26,7 @@ public class Haravalogiikka {
      *
      * @see toimintalogiikka.Haravalogiikka#luoRuudukko(int)
      * @see toimintalogiikka.Haravalogiikka#laitaMiinatRuudukkoon(int, int)
-     * @see toimintalogiikka.Haravalogiikka#laitaNumerotRuudukkoon()
+     * @see toimintalogiikka.Haravalogiikka#laitaNumerotRuudukkoon(Ruutu[] miinat)
      * @see toimintalogiikka.Haravalogiikka#maaritaMiinamaara(int)
      */
     public Haravalogiikka(int koko) {
