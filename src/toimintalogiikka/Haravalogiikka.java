@@ -11,9 +11,12 @@ import java.util.Random;
  * @author Broileri
  */
 public class Haravalogiikka {
-
-    private int[][] miinakentta;   
+    
+    /**
+     * tyhjat on Ruutu-taulu, johon tallennetaan avattavien tyhjien ruutujen indeksit.
+     */
     private Ruutu[] tyhjat;
+    private int[][] miinakentta;   
     private int ruudukonSivu;
 
     /**
@@ -29,7 +32,6 @@ public class Haravalogiikka {
     public Haravalogiikka(int koko) {
         ruudukonSivu = koko;
         luoRuudukko(koko);
-        //laitaMiinatRuudukkoon(koko, maaritaMiinamaara(koko));
         laitaNumerotRuudukkoon(laitaMiinatRuudukkoon(koko, maaritaMiinamaara(koko)));
     }
 
@@ -72,7 +74,7 @@ public class Haravalogiikka {
     }
 
     /**
-     * Laittaa miinoja ruudukkoon sattumanvaraisiin kohtiin ja tallettaa
+     * Laittaa miinoja ruudukkoon sattumanvaraisiin kohtiin ja palauttaa
      * miinojen sijainnit.
      *
      * @param koko Ruudukon sivun pituus.
@@ -190,8 +192,8 @@ public class Haravalogiikka {
     }
  
     /**
-     * Jos annettu ruutu on tyhjä, metodi merkitsee sen ja sitä ympäröivät
-     * tyhjät ruudut yhdeksiköillä. 9 tarkoittaa tyhjää, avattavaa ruutua.
+     * Metodi merkitsee annetun tyhjän Ruudun ja sitä ympäröivät
+     * tyhjät Ruudut yhdeksiköillä. 9 tarkoittaa tyhjää, avattavaa ruutua.
      * Flood fill -periaate.
      *
      * @param miinakentta Miinakenttä, int[][]

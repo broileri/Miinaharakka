@@ -10,8 +10,6 @@ import javax.swing.*;
 import toimintalogiikka.Haravalogiikka;
 import toimintalogiikka.Ruutu;
 
-// TO DO
-// päivitä javadoc, luokkakaavio, sekvenssikaavio, testidokki
 /**
  * Luokka luo peli-ikkunan ja suorittaa pelin ja käyttäjän väliseen
  * kanssakäyntiin liittyviä operaatioita.
@@ -24,14 +22,21 @@ public class Kayttoliittyma extends JFrame {
     private ImageIcon harakka, hkummastus, hvoitto, hkuolema, miina, lippu, kysymys,
             yksi, kaksi, kolme, nelja, viisi, kuusi, seitseman, kahdeksan, boom, okmiina;
     private JButton iso, pieni, normi, reset;
+    /**
+     * napukat-HashMapiin tallennetaan peli-ikkunan peliruudukon napit.
+     */
     private HashMap<Integer, JButton> napukat;
+    /**
+     * auki-tauluun tallennetaan Haravalogiikasta saatavien avattavien
+     * ruutujen koordinaatit.
+     */
     private Ruutu[] auki;
     private Ajastin aika;
     private Haravalogiikka logiikka;
     private JPanel ruudukkopaneeli;
     private JTextField miinamittari;
     private boolean ajastinKayntiin;
-    private int pelinKoko = 9, ax, yy, lippumaara;
+    private int pelinKoko = 9, lippujaKayttamatta;
 
     /**
      * Konstruktori kutsuu erilaisia metodeja, jotka yhdessä rakentavat
@@ -44,20 +49,11 @@ public class Kayttoliittyma extends JFrame {
      */
     public Kayttoliittyma() {
 
-        // Nappi-ikonit
-        lataaIkonit();
-
-        // Nappulat
-        lataaNapit();
-
-        // Tapahtumakuuntelijoiden asettaminen
-        tapahtumakuuntelijatValikolle();
-
-        // Peli-ikkunan luonti        
-        aloitaPeli(true);
-
-        // Asetukset
-        this.setTitle("Miinaharakka"); // Otsikko \o/        
+        lataaIkonit(); // Nappi-ikonit        
+        lataaNapit(); // Nappulat
+        tapahtumakuuntelijatValikolle(); // Tapahtumakuuntelijoiden asettaminen      
+        aloitaPeli(true); // Peli-ikkunan luonti         
+        this.setTitle("Miinaharakka"); // Otsikko        
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); // Osaa loppua
         this.setVisible(true); // Olio näkyviin
     }
@@ -119,23 +115,20 @@ public class Kayttoliittyma extends JFrame {
         reset.setIcon(harakka);
         napukat = new HashMap<Integer, JButton>();
 
-        // Käynnistyksen yhteydessä säädettävät asetukset
-        if (onkoEkaKrt) {
+        if (onkoEkaKrt) { // Käynnistyksen yhteydessä säädettävät asetukset
             ekaPeli();
-        } // Uusi peli (ensimmäisen käynnistyksen jälkeen)
-        else {
+        } else { // Uusi peli (ensimmäisen käynnistyksen jälkeen)
             this.remove(ruudukkopaneeli);
             ruudukkopaneeli = teeRuudukkopaneeli();
             this.add("Center", ruudukkopaneeli);
         }
-        // Ruudukon hiirikuuntelijoiden asennus
         for (int i = 0; i < pelinKoko * pelinKoko; i++) {
-            hiirikuuntelijatRuudukolle(i);
+            hiirikuuntelijatRuudukolle(i); // Ruudukon hiirikuuntelijoiden asennus
         }
         // Muuttujien "nollaus" ja kaiken kokoon kursiminen
         logiikka = new Haravalogiikka(pelinKoko);
-        lippumaara = logiikka.getMiinamaara();
-        miinamittari.setText(Integer.toString(lippumaara));
+        lippujaKayttamatta = logiikka.getMiinamaara();
+        miinamittari.setText(Integer.toString(lippujaKayttamatta));
         ajastinKayntiin = true;
         this.pack();
     }
@@ -379,15 +372,12 @@ public class Kayttoliittyma extends JFrame {
         Ruutu r = haeIndeksi(indeksi);
         int mikaRuutu = miinakentta[r.getX()][r.getY()];
 
-        // Miinan avaus
-        if (mikaRuutu == -1) {
+        if (mikaRuutu == -1) { // Miinan avaus
             return tappio(indeksi);
 
-            // Tyhjän ruudun avaus    
-        } else if (mikaRuutu == 0) {
+        } else if (mikaRuutu == 0) { // Tyhjän ruudun avaus
             logiikka.etsiTyhjat(miinakentta, r);
-            // Tyhjien koordinaatit
-            auki = logiikka.getTyhjat();
+            auki = logiikka.getTyhjat(); // Tyhjien koordinaatit
 
             // Tyhjien avaaminen ja Ruutu-taulukon "tyhjien" Ruutujen (-9) poissulkeminen
             for (int i = 0; i < auki.length; i++) {
@@ -399,10 +389,8 @@ public class Kayttoliittyma extends JFrame {
                     }
                 }
             }
-            // Tyhjien ruutujen reunojen avaus
-            avaaTyhjienReunat(auki);
-        } // Numeroruudun avaus 
-        else {
+            avaaTyhjienReunat(auki); // Tyhjien ruutujen reunojen avaus
+        } else { // Numeroruudun avaus
             return numeroruudunAvaus(mikaRuutu);
         }
         return null;
@@ -445,7 +433,7 @@ public class Kayttoliittyma extends JFrame {
      * Metodi muuttaa JButton-HashMapin avaimen Ruuduksi ja palauttaa sen
      * Ruutuna.
      *
-     * @param indeksi
+     * @param indeksi Nappi-HashMapin indeksi.
      * @return
      */
     public Ruutu haeIndeksi(int indeksi) {
@@ -510,15 +498,15 @@ public class Kayttoliittyma extends JFrame {
                 else if (e.getButton() == MouseEvent.BUTTON3 && nappula.getIcon() == null
                         && nappula.isEnabled()) {
                     nappula.setIcon(lippu);
-                    lippumaara--;
-                    miinamittari.setText(Integer.toString(lippumaara));
+                    lippujaKayttamatta--;
+                    miinamittari.setText(Integer.toString(lippujaKayttamatta));
 
                 } // Jos ruudussa lippu ja HIIRI3, ruutuun ? 
                 else if (e.getButton() == MouseEvent.BUTTON3 && nappula.getIcon() == lippu
                         && nappula.isEnabled()) {
                     nappula.setIcon(kysymys);
-                    lippumaara++;
-                    miinamittari.setText(Integer.toString(lippumaara));
+                    lippujaKayttamatta++;
+                    miinamittari.setText(Integer.toString(lippujaKayttamatta));
                 } // Jos ruudussa ? ja HIIRI3, ruutu tyhjäksi
                 else if (e.getButton() == MouseEvent.BUTTON3 && nappula.getIcon() == kysymys
                         && nappula.isEnabled()) {
@@ -550,7 +538,6 @@ public class Kayttoliittyma extends JFrame {
                         aloitaPeli(false);
                     }
                 });
-
         // Koonvalintanapit
         kuuntelijatKokoNappuloille(9, pieni);
         kuuntelijatKokoNappuloille(16, normi);
@@ -562,7 +549,7 @@ public class Kayttoliittyma extends JFrame {
      * tapahtumakuuntelijan.
      *
      * @param pkoko Pelin koko.
-     * @param kokoSML
+     * @param kokoSML S-, M- tai L-JButton.
      */
     public void kuuntelijatKokoNappuloille(final int pkoko, JButton kokoSML) {
 
@@ -584,7 +571,7 @@ public class Kayttoliittyma extends JFrame {
      * aloitaPeli().
      *
      * @return ruudukkopaneeli
-     * @see grafiikat.Kayttoliittyma#aloitaPeli()
+     * @see grafiikat.Kayttoliittyma#aloitaPeli(boolean)
      */
     private JPanel teeRuudukkopaneeli() {
 
@@ -602,7 +589,7 @@ public class Kayttoliittyma extends JFrame {
      *
      * @return ylapneeli
      *
-     * @see grafiikat.Kayttoliittyma#aloitaPeli()
+     * @see grafiikat.Kayttoliittyma#aloitaPeli(boolean)
      * @see grafiikat.Ajastin
      */
     private JPanel teeYlapaneeli() {
