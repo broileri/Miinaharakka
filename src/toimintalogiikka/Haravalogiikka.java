@@ -91,8 +91,8 @@ public class Haravalogiikka {
             
             while (true) {
                 // Pitää huolen, ettei samaan kohtaan tule kahdesti miinaa
-                int x = arpoja.nextInt(koko - 1);
-                int y = arpoja.nextInt(koko - 1);
+                int x = arpoja.nextInt(koko);
+                int y = arpoja.nextInt(koko);
                 if (miinakentta[x][y] == 0) {
                     miinakentta[x][y] = -1; // -1 tarkoittaa miinaa
                     miinat[talletusindeksi] = new Ruutu(x, y);

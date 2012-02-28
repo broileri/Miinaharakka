@@ -1,10 +1,7 @@
 package grafiikat;
 
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
+import java.awt.event.*;
 import java.util.HashMap;
 import javax.swing.*;
 import toimintalogiikka.Haravalogiikka;
@@ -35,9 +32,9 @@ public class Kayttoliittyma extends JFrame {
     private Haravalogiikka logiikka;
     private JPanel ruudukkopaneeli;
     private JTextField miinamittari;
-    private boolean ajastinKayntiin;
-    private int pelinKoko = 9, lippujaKayttamatta;
-
+    private boolean ajastinKayntiin, hiirikuuntelijaPaalla;
+    private int pelinKoko = 9, lippujaKayttamatta;    
+   
     /**
      * Konstruktori kutsuu erilaisia metodeja, jotka yhdessä rakentavat
      * peli-ikkunan.
@@ -113,6 +110,7 @@ public class Kayttoliittyma extends JFrame {
     private void aloitaPeli(boolean onkoEkaKrt) {
 
         reset.setIcon(harakka);
+        hiirikuuntelijaPaalla = true;
         napukat = new HashMap<Integer, JButton>();
 
         if (onkoEkaKrt) { // Käynnistyksen yhteydessä säädettävät asetukset
@@ -204,7 +202,7 @@ public class Kayttoliittyma extends JFrame {
         int[][] miinakentta = logiikka.getRuudukko();
 
         for (int i = 0; i < pelinKoko * pelinKoko; i++) {
-
+            
             Ruutu r = haeIndeksi(i);
             int mikaRuutu = miinakentta[r.getX()][r.getY()];
 
@@ -212,18 +210,20 @@ public class Kayttoliittyma extends JFrame {
             if (mikaRuutu == -1 && avainJosTappio == 1000) {
                 napukat.get(i).setIcon(okmiina);
                 napukat.get(i).setDisabledIcon(okmiina);
-            } // Kuolema ja miina
-            else if (mikaRuutu == -1) {
+                napukat.get(i).setEnabled(false);
+            } // Kuolema ja miina            
+            else if(mikaRuutu == -1) {
                 napukat.get(i).setIcon(miina);
                 napukat.get(i).setDisabledIcon(miina);
-            } // Numero
-            else {
-                napukat.get(i).setIcon(numeroruudunAvaus(mikaRuutu));
-                napukat.get(i).setDisabledIcon(numeroruudunAvaus(mikaRuutu));
+                napukat.get(i).setEnabled(false);
             }
-            napukat.get(i).setEnabled(false);
+            // Voitto ja tyhjä
+            else if (avainJosTappio == 1000) {
+                napukat.get(i).setEnabled(false);
+            }
         }
         if (avainJosTappio != 1000) {
+            hiirikuuntelijaPaalla = false;
             return boom;
         }
         return null;
@@ -474,12 +474,14 @@ public class Kayttoliittyma extends JFrame {
     private void hiirikuuntelijatRuudukolle(final int indeksi) {
 
         final JButton nappula = napukat.get(indeksi);
-
-        nappula.addMouseListener(new MouseAdapter() {
+       
+               
+               nappula.addMouseListener(new MouseAdapter() {
 
             @Override
             public void mouseReleased(MouseEvent e) {
 
+                if (hiirikuuntelijaPaalla) {
                 // Jos ruudussa ei lippua ja HIIRI1, se aukeaa
                 if (e.getButton() == MouseEvent.BUTTON1
                         && nappula.getIcon() != lippu && nappula.isEnabled()) {
@@ -512,7 +514,8 @@ public class Kayttoliittyma extends JFrame {
                     nappula.setIcon(null);
                 }
             }
-        });
+            }
+        }); 
     }
 
     /**
