@@ -1,16 +1,16 @@
 import org.junit.*;
 import static org.junit.Assert.*;
-import toimintalogiikka.Ruutu;
+import game_logic.Tile;
 
 /**
- * Luokka testaa Ruutu-luokkaa
+ * Luokka testaa Tile-luokkaa
  * @author Broileri
  */
 public class RuutuTest {
     
     public RuutuTest() {
     }
-    private Ruutu r, n;
+    private Tile r, n;
 
     @BeforeClass
     public static void setUpClass() throws Exception {
@@ -22,8 +22,8 @@ public class RuutuTest {
     
     @Before
     public void setUp() {
-        r = new Ruutu(23, 69);
-        n = new Ruutu(1, 2);
+        r = new Tile(23, 69);
+        n = new Tile(1, 2);
     }
     
     @After
