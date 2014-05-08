@@ -74,7 +74,7 @@ public class GameTimer extends JFrame implements ActionListener {
     public void actionPerformed(ActionEvent e) {
         if (!timerStop) {
             timeField.setText(Integer.toString(seconds));
-            seconds = seconds + 1;
+            seconds++;
         } else {
             timer.stop();
             timerStop = false;

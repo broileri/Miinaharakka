@@ -10,7 +10,6 @@ import game_logic.Tile;
 /**
  * This class creates a game window and handles the interactions between the
  * user and the game.
- *
  * @author Broileri
  */
 public class GUI extends JFrame {
@@ -87,7 +86,6 @@ public class GUI extends JFrame {
 
     /**
      * Starts a new game by creating a new instance of Minefield.
-     *
      * @see graphics.GUI#createGameWindow()
      * @see graphics.GUI#createButtonFieldPanel()
      * @see game_logic.Minefield#getAmountOfMines()
@@ -122,7 +120,6 @@ public class GUI extends JFrame {
 
     /**
      * Creates a game window when the game is started for the first time.
-     *
      * @see graphics.GUI#createButtonFieldPanel()
      */
     public void createGameWindow() {
@@ -220,7 +217,6 @@ public class GUI extends JFrame {
     /**
      * When the player opens a tile that doesn't contain a mine or a number, all other empty tiles that surround 
      * that tile get opened, too. This method opens the number tiles that are on the edges of that blank area.
-     *
      * @param blanks The X and Y coordinates of the blank tiles.
      */
     public void openEdgesOfBlankArea(Tile[] blanks) {
@@ -233,58 +229,56 @@ public class GUI extends JFrame {
         }
         int index = 0;
 
-        for (int i = 0; i < blanks.length; i++) {
-
-            if (blanks[i].getX() != -9) {
-
+        for (Tile blank : blanks) {
+            if (blank.getX() != -9) {
                 // Upper
-                if (this.minefield.fieldContainsLocation(blanks[i].getX() - 1, blanks[i].getY() - 1)) {
-                    if (helper_minefield[blanks[i].getX() - 1][blanks[i].getY() - 1] != 9) {
-                        hashmap_indexes[index] = createIndex(blanks[i].getX() - 1, blanks[i].getY() - 1);
+                if (this.minefield.fieldContainsLocation(blank.getX() - 1, blank.getY() - 1)) {
+                    if (helper_minefield[blank.getX() - 1][blank.getY() - 1] != 9) {
+                        hashmap_indexes[index] = createIndex(blank.getX() - 1, blank.getY() - 1);
                         index++;
                     }
                 }
-                if (this.minefield.fieldContainsLocation(blanks[i].getX() - 1, blanks[i].getY())) {
-                    if (helper_minefield[blanks[i].getX() - 1][blanks[i].getY()] != 9) {
-                        hashmap_indexes[index] = createIndex(blanks[i].getX() - 1, blanks[i].getY());
+                if (this.minefield.fieldContainsLocation(blank.getX() - 1, blank.getY())) {
+                    if (helper_minefield[blank.getX() - 1][blank.getY()] != 9) {
+                        hashmap_indexes[index] = createIndex(blank.getX() - 1, blank.getY());
                         index++;
                     }
                 }
-                if (this.minefield.fieldContainsLocation(blanks[i].getX() - 1, blanks[i].getY() + 1)) {
-                    if (helper_minefield[blanks[i].getX() - 1][blanks[i].getY() + 1] != 9) {
-                        hashmap_indexes[index] = createIndex(blanks[i].getX() - 1, blanks[i].getY() + 1);
+                if (this.minefield.fieldContainsLocation(blank.getX() - 1, blank.getY() + 1)) {
+                    if (helper_minefield[blank.getX() - 1][blank.getY() + 1] != 9) {
+                        hashmap_indexes[index] = createIndex(blank.getX() - 1, blank.getY() + 1);
                         index++;
                     }
                 }
                 // Sides
-                if (this.minefield.fieldContainsLocation(blanks[i].getX(), blanks[i].getY() - 1)) {
-                    if (helper_minefield[blanks[i].getX()][blanks[i].getY() - 1] != 9) {
-                        hashmap_indexes[index] = createIndex(blanks[i].getX(), blanks[i].getY() - 1);
+                if (this.minefield.fieldContainsLocation(blank.getX(), blank.getY() - 1)) {
+                    if (helper_minefield[blank.getX()][blank.getY() - 1] != 9) {
+                        hashmap_indexes[index] = createIndex(blank.getX(), blank.getY() - 1);
                         index++;
                     }
                 }
-                if (this.minefield.fieldContainsLocation(blanks[i].getX(), blanks[i].getY() + 1)) {
-                    if (helper_minefield[blanks[i].getX()][blanks[i].getY() + 1] != 9) {
-                        hashmap_indexes[index] = createIndex(blanks[i].getX(), blanks[i].getY() + 1);
+                if (this.minefield.fieldContainsLocation(blank.getX(), blank.getY() + 1)) {
+                    if (helper_minefield[blank.getX()][blank.getY() + 1] != 9) {
+                        hashmap_indexes[index] = createIndex(blank.getX(), blank.getY() + 1);
                         index++;
                     }
                 }
                 // Lower
-                if (this.minefield.fieldContainsLocation(blanks[i].getX() + 1, blanks[i].getY() - 1)) {
-                    if (helper_minefield[blanks[i].getX() + 1][blanks[i].getY() - 1] != 9) {
-                        hashmap_indexes[index] = createIndex(blanks[i].getX() + 1, blanks[i].getY() - 1);
+                if (this.minefield.fieldContainsLocation(blank.getX() + 1, blank.getY() - 1)) {
+                    if (helper_minefield[blank.getX() + 1][blank.getY() - 1] != 9) {
+                        hashmap_indexes[index] = createIndex(blank.getX() + 1, blank.getY() - 1);
                         index++;
                     }
                 }
-                if (this.minefield.fieldContainsLocation(blanks[i].getX() + 1, blanks[i].getY())) {
-                    if (helper_minefield[blanks[i].getX() + 1][blanks[i].getY()] != 9) {
-                        hashmap_indexes[index] = createIndex(blanks[i].getX() + 1, blanks[i].getY());
+                if (this.minefield.fieldContainsLocation(blank.getX() + 1, blank.getY())) {
+                    if (helper_minefield[blank.getX() + 1][blank.getY()] != 9) {
+                        hashmap_indexes[index] = createIndex(blank.getX() + 1, blank.getY());
                         index++;
                     }
                 }
-                if (this.minefield.fieldContainsLocation(blanks[i].getX() + 1, blanks[i].getY() + 1)) {
-                    if (helper_minefield[blanks[i].getX() + 1][blanks[i].getY() + 1] != 9) {
-                        hashmap_indexes[index] = createIndex(blanks[i].getX() + 1, blanks[i].getY() + 1);
+                if (this.minefield.fieldContainsLocation(blank.getX() + 1, blank.getY() + 1)) {
+                    if (helper_minefield[blank.getX() + 1][blank.getY() + 1] != 9) {
+                        hashmap_indexes[index] = createIndex(blank.getX() + 1, blank.getY() + 1);
                         index++;
                     }
                 }
@@ -297,7 +291,6 @@ public class GUI extends JFrame {
 
     /**
      * Sets icons for the tiles defined by openEdgesOfBlankArea
-     *
      * @param hashmap_indexes
      * @param helper_minefield
      * @param index    
@@ -320,7 +313,6 @@ public class GUI extends JFrame {
 
     /**
      * Returns the proper icon for an opened tile.
-     *
      * @param index The HashMap key of the given button.
      * @return Icon for the opened tile.
      * @see graphics.GUI#openEdgesOfBlankArea(game_logic.Tile[])
@@ -420,7 +412,6 @@ public class GUI extends JFrame {
 
     /**
      * Creates mouse listeners for the button field.
-     *
      * @param index key value for the JButton HashMapin.
      * @see graphics.GameTimer
      * @see graphics.GUI#checkSituation()
