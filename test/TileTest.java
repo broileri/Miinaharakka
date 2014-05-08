@@ -3,14 +3,14 @@ import static org.junit.Assert.*;
 import game_logic.Tile;
 
 /**
- * Luokka testaa Tile-luokkaa
+ * Testing Tile class
  * @author Broileri
  */
-public class RuutuTest {
+public class TileTest {
     
-    public RuutuTest() {
+    public TileTest() {
     }
-    private Tile r, n;
+    private Tile t, s;
 
     @BeforeClass
     public static void setUpClass() throws Exception {
@@ -22,8 +22,8 @@ public class RuutuTest {
     
     @Before
     public void setUp() {
-        r = new Tile(23, 69);
-        n = new Tile(1, 2);
+        t = new Tile(23, 69);
+        s = new Tile(1, 2);
     }
     
     @After
@@ -31,41 +31,41 @@ public class RuutuTest {
     }
 
     @Test
-    public void haeX() {
+    public void getX() {
         int x1, x2;
-        x1 = r.getX();
-        x2 = n.getX();
+        x1 = t.getX();
+        x2 = s.getX();
         assertEquals(23, x1);
         assertEquals(1, x2);
     }
     
     @Test
-    public void haeY() {
+    public void getY() {
         int y1, y2;
-        y1 = r.getY();
-        y2 = n.getY();
+        y1 = t.getY();
+        y2 = s.getY();
         assertEquals(69, y1);
         assertEquals(2, y2);
     }
     
     @Test
-    public void laitaX() {
+    public void setX() {
         int x1 = 3, x2 = 8, x4, x5;
-        r.setX(x1);
-        n.setX(x2);
-        x4 = r.getX();
-        x5 = n.getX();        
+        t.setX(x1);
+        s.setX(x2);
+        x4 = t.getX();
+        x5 = s.getX();        
         assertEquals(x1, x4);
         assertEquals(x2, x5);
     }
     
     @Test
-    public void laitaY() {
+    public void setY() {
         int y1 = 6, y2 = 11, y4, y5;
-        r.setY(y1);
-        n.setY(y2);
-        y4 = r.getY();
-        y5 = n.getY();
+        t.setY(y1);
+        s.setY(y2);
+        y4 = t.getY();
+        y5 = s.getY();
         assertEquals(y1, y4);
         assertEquals(y2, y5);
     }
