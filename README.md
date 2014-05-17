@@ -9,6 +9,7 @@ TO DO
 - add moar tests?
 - divide GUI into smaller classes?
 - check for typos
+- update the documents
 
 ADD THESE FEATURES
 - high scores
