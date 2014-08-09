@@ -14,4 +14,4 @@ TO DO
 ADD THESE FEATURES
 - high scores
 - show correctly egged mines after defeat
-DONE create and add a new bird icon for opening a tile
+- create and add a new bird icon for opening a tile ~DONE~
