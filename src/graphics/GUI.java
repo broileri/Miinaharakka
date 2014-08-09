@@ -15,7 +15,7 @@ import game_logic.Tile;
 public class GUI extends JFrame {
 
     // Buttons and icons
-    private ImageIcon bird_normal, bird_pressed, bird_victory, bird_fainted, mine_whole, egged_tile, unsure, one, two, three, four, five, six, seven, eight, mine_explosion, mine_found;
+    private ImageIcon bird_normal, bird_newgame, bird_clicked,  bird_victory, bird_fainted, mine_whole, egged_tile, unsure, one, two, three, four, five, six, seven, eight, mine_explosion, mine_found;
     private JButton large, small, normal, reset;
     private HashMap<Integer, JButton> field_buttons; // this is where the buttons of the game field are saved
     private Tile[] to_be_opened; // this is where the coordinates of the to-be-opened tiles are saved
@@ -23,7 +23,7 @@ public class GUI extends JFrame {
     private Minefield minefield;
     private JPanel button_field_panel;
     private JTextField mine_meter;
-    private boolean start_timer, mouse_listener_on;
+    private boolean start_timer, mouse_listener_on, player_lost;
     private int game_size = 9, unused_eggs;
 
     /**
@@ -50,7 +50,7 @@ public class GUI extends JFrame {
     private void createMenuButtons() {
 
         reset = new JButton(bird_normal);
-        reset.setPressedIcon(bird_pressed);
+        reset.setPressedIcon(bird_newgame);
         reset.setFocusPainted(false);
         small = new JButton("S");
         small.setFocusPainted(false);
@@ -66,8 +66,9 @@ public class GUI extends JFrame {
     private void loadIcons() {
 
         bird_normal = new ImageIcon(getClass().getResource("Icons/miinaharakka2.png"));
-        bird_pressed = new ImageIcon(getClass().getResource("Icons/miinaharakkaiik2.png"));
+        bird_newgame = new ImageIcon(getClass().getResource("Icons/miinaharakkaiik2.png"));
         bird_victory = new ImageIcon(getClass().getResource("Icons/miinaharakkajee2.png"));
+        bird_clicked = new ImageIcon(getClass().getResource("Icons/miinaharakkaklik2.png"));
         bird_fainted = new ImageIcon(getClass().getResource("Icons/miinaharakkakuol2.png"));
         mine_whole = new ImageIcon(getClass().getResource("Icons/miina2.png"));
         egged_tile = new ImageIcon(getClass().getResource("Icons/lippu4.png"));
@@ -96,6 +97,7 @@ public class GUI extends JFrame {
 
         reset.setIcon(bird_normal);
         mouse_listener_on = true;
+        player_lost = false;
         field_buttons = new HashMap<Integer, JButton>();
 
         if (first_game) {
@@ -328,6 +330,7 @@ public class GUI extends JFrame {
 
         if (tileType == -1) { // It's a mine
             endGame(true);
+            player_lost = true;
             return mine_explosion;
 
         } else if (tileType == 0) { // It's a blank
@@ -422,11 +425,25 @@ public class GUI extends JFrame {
         final JButton button = field_buttons.get(index);
 
         button.addMouseListener(new MouseAdapter() {
-
+            
+            @Override
+            public void mousePressed(MouseEvent e) {
+                if (mouse_listener_on) { 
+                    reset.setIcon(bird_clicked);
+                }
+            }
+            
             @Override
             public void mouseReleased(MouseEvent e) {
+                if (mouse_listener_on && !player_lost) { 
+                    reset.setIcon(bird_normal);
+                }
+            }
 
-                if (mouse_listener_on) {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+
+                if (mouse_listener_on) {                    
                     // If a tile is not egged and MOUSE1, the tile opens 
                     if (e.getButton() == MouseEvent.BUTTON1
                             && button.getIcon() != egged_tile && button.isEnabled()) {
@@ -457,7 +474,7 @@ public class GUI extends JFrame {
                     else if (e.getButton() == MouseEvent.BUTTON3 && button.getIcon() == unsure
                             && button.isEnabled()) {
                         button.setIcon(null);
-                    }
+                    }                    
                 }
             }
         });
