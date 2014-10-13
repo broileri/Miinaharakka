@@ -1,11 +1,10 @@
 package game_logic;
 
-import graphics.GUI;
+import graphics.GameWindow;
 
 public class Main {
 
-    // Starting the app
     public static void main(String[] args) {
-        GUI game = new GUI();
+        GameWindow g = new GameWindow();
     }
 }
