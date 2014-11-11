@@ -98,7 +98,6 @@ public class Minefield {
         if (fieldContainsLocation(x + 1, y + 1) && minefield[x + 1][y + 1] != -1) {
             minefield[x + 1][y + 1]++;
         }
-
     }
 
     /**
