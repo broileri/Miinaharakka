@@ -7,7 +7,6 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
-import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
@@ -16,7 +15,7 @@ import javax.swing.JTextField;
  * 
  * @author Broileri
  */
-public class GameGrid extends JFrame {
+public class GameGrid {
 
     private ImageIcon bird_clicked, bird_victory, bird_fainted, bird_normal;
     private ImageIcon mine_whole, egged_tile, unsure, mine_explosion, mine_found;
