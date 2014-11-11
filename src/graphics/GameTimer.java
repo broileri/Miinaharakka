@@ -11,7 +11,6 @@ import javax.swing.Timer;
 /**
  * A class for timing the game.
  * @author Broileri
- * @see graphics.GUI
  */
 public class GameTimer extends JFrame implements ActionListener {
 
@@ -22,7 +21,6 @@ public class GameTimer extends JFrame implements ActionListener {
 
     /**
      * The constructor adds a timer to the given JPanel.
-     * @param panel The given JPanel.
      */
     public GameTimer(JPanel panel) {
         

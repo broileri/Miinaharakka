@@ -57,8 +57,6 @@ public class GameWindow extends JFrame {
 
     /*
      * Creates a game window when the game is started for the first time.
-     *
-     * @see graphics.GUI#createButtonFieldPanel()
      */
     private void createWindow() {
 
@@ -222,6 +220,9 @@ public class GameWindow extends JFrame {
 
     }
 
+    /**
+     * Opens all tiles when game ends.
+     */
     private void revealGameBoard() {
 
         for (int x = 0; x < GRID_SIDE; x++) {
@@ -270,6 +271,9 @@ public class GameWindow extends JFrame {
         }
     }
 
+    /**
+     * Opens all blank tiles surrounding the clicked blank tile.
+     */
     public void openBlankArea(int x, int y) {
 
         if (x >= 0 && x < GRID_SIDE && y >= 0 && y < GRID_SIDE) {
@@ -305,10 +309,6 @@ public class GameWindow extends JFrame {
 
     /**
      * Creates and returns the menu panel.
-     *
-     * @return menu_panel
-     * @see graphics.GUI#startGame(boolean)
-     * @see graphics.GameTimer
      */
     private JPanel createWindowMenuPanel() {
 
@@ -368,9 +368,6 @@ public class GameWindow extends JFrame {
 
     /**
      * Sets an event listener for a size button.
-     *
-     * @param g_size The size of the game.
-     * @param button_size S, M or L JButton.
      */
     private void addEventListenerForSizeButton(final int side, JButton size_button) {
 

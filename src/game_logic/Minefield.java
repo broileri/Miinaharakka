@@ -3,8 +3,7 @@ package game_logic;
 import java.util.Random;
 
 /**
- * This class creates a minefield that contains the positions of the mines,
- * numbers and blanks.
+ * This class creates a minefield that contains the positions of the mines, numbers and blanks.
  *
  * @author Broileri
  */
@@ -17,11 +16,7 @@ public class Minefield {
 
     /**
      * Creates a new game.
-     *
      * @param size The length of the side of the field. Either 9, 16 or 22.
-     * @see game_logic.Minefield#placeMines(int, int)
-     * @see game_logic.Minefield#addNumbersOnField(Tile[] mines)
-     * @see game_logic.Minefield#amountOfMines(int)
      */
     public Minefield(int size) {
         MINE_TILE = -1;
@@ -30,14 +25,11 @@ public class Minefield {
         MINE_AMOUNT = amountOfMines(FIELD_SIDE);
 
         minefield = new int[FIELD_SIDE][FIELD_SIDE];
-        placeMines();
+        placeMinesOnField();
     }
 
     /**
      * Defines the amount of mines based on the size of the minefield.
-     *
-     * @param size The length of the side of the field.
-     * @return The amount of mines.
      */
     private int amountOfMines(int size) {
 
@@ -51,12 +43,9 @@ public class Minefield {
     }
 
     /**
-     * Places mines randomly on the field and returns their positions.
-     *
-     * @param size The length of the side of the minefield.
-     * @param mine_amount The amount of mines.
+     * Places mines randomly on the field.
      */
-    private void placeMines() {
+    private void placeMinesOnField() {
 
         Random mine_dealer = new Random();
 
@@ -68,7 +57,6 @@ public class Minefield {
                 int y = mine_dealer.nextInt(FIELD_SIDE);
 
                 if (minefield[x][y] != MINE_TILE) {
-
                     minefield[x][y] = MINE_TILE;
                     addNumbersAroundMine(x, y);
                     break;
@@ -80,8 +68,6 @@ public class Minefield {
     /**
      * Surrounds the mines with numbers, so that each number is surrounded by as
      * many mines as the number indicates.
-     *
-     * @see game_logic.Minefield#fieldContainsLocation(int, int)
      */
     private void addNumbersAroundMine(int x, int y) {
 
@@ -116,21 +102,13 @@ public class Minefield {
     }
 
     /**
-     * Checks whether the matrix contains location (x, y).
-     *
-     * @param x coordinate
-     * @param y coordinate
-     * @return true, if the matrix contains the given location.
+     * Checks whether the matrix contains location (x, y).     
      */
     public boolean fieldContainsLocation(int x, int y) {
-
+        
         return x <= (minefield.length - 1) && y <= (minefield.length - 1) && x >= 0 && y >= 0;
     }
 
-    /**
-     * Returns the matrix representation of the minefield that contains mines,
-     * blanks, opened tiles and numbers.
-     */
     public int[][] getMinematrix() {
         return this.minefield;
     }
