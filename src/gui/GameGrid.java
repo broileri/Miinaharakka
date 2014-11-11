@@ -1,40 +1,37 @@
-package graphics;
+package gui;
 
 import game_logic.Minefield;
-import java.awt.BorderLayout;
 import java.awt.Dimension;
-import java.awt.FlowLayout;
-import java.awt.Font;
 import java.awt.GridLayout;
-import java.awt.Toolkit;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import static java.awt.image.ImageObserver.WIDTH;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
-import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
-public class GameWindow extends JFrame {
+/**
+ * Creates and maintains the button grid that acts as a minefield.
+ * 
+ * @author Broileri
+ */
+public class GameGrid extends JFrame {
 
-    private ImageIcon bird_normal, bird_newgame, bird_clicked, bird_victory, bird_fainted, mine_whole, egged_tile, unsure, mine_explosion, mine_found;
+    private ImageIcon bird_clicked, bird_victory, bird_fainted, bird_normal;
+    private ImageIcon mine_whole, egged_tile, unsure, mine_explosion, mine_found;
     private ImageIcon[] numbers;
-    private JButton large, small, medium, reset;
     private JButton[][] button_grid;
-    private GameTimer timer;
-    private JPanel game_board;
-    private JTextField mine_meter;
+    private JButton reset;
     private boolean GRID_IS_CLICKABLE, PLAYER_LOSES;
     private int[][] minematrix;
-    private int MINE_TILE, BLANK_TILE, GRID_SIDE, UNUSED_EGGS, TILES_LEFT_TO_OPEN, MINE_COUNT;
+    private int MINE_TILE, BLANK_TILE, TILES_LEFT_TO_OPEN, GRID_SIDE, UNUSED_EGGS, MINE_COUNT;
     private boolean START_TIMER = true;
     private Minefield minefield;
+    private JTextField mine_meter;
+    private GameTimer timer;
 
-    public GameWindow() {
+    public GameGrid() {
 
         GRID_SIDE = 9;
 
@@ -52,47 +49,9 @@ public class GameWindow extends JFrame {
         GRID_IS_CLICKABLE = true;
 
         loadIcons();
-        createWindow();
     }
 
-    /*
-     * Creates a game window when the game is started for the first time.
-     */
-    private void createWindow() {
-
-        BorderLayout layout = new BorderLayout(10, 10);
-        layout.setVgap(10);
-        this.setLayout(layout);
-
-        JPanel left = new JPanel();
-        left.setSize(30, WIDTH);
-        this.add("West", left);
-
-        JPanel right = new JPanel();
-        right.setSize(30, WIDTH);
-        this.add("East", right);
-
-        JPanel lower = new JPanel();
-        lower.setSize(WIDTH, 15);
-        this.add("South", lower);
-
-        game_board = createGameBoard();
-        this.add("Center", game_board);
-
-        this.add("North", createWindowMenuPanel());
-
-        Toolkit t = Toolkit.getDefaultToolkit();
-        this.setSize((t.getScreenSize().height) / 2, (t.getScreenSize().width) / 3);
-
-        this.setResizable(false);
-        this.setTitle("Miinaharakka");
-        this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        this.setVisible(true);
-        this.pack();
-        this.setLocationRelativeTo(null);
-    }
-
-    private JPanel createGameBoard() {
+    public JPanel createGameBoard() {
 
         JPanel panel = new JPanel();
         panel.setLayout(new GridLayout(GRID_SIDE, GRID_SIDE));
@@ -124,7 +83,7 @@ public class GameWindow extends JFrame {
 
             @Override
             public void mouseReleased(MouseEvent e) {
-                if (GRID_IS_CLICKABLE) { //  && !player_lost
+                if (GRID_IS_CLICKABLE) {
                     reset.setIcon(bird_normal);
                 }
             }
@@ -143,7 +102,6 @@ public class GameWindow extends JFrame {
                             timer.start();
                         }
                         openTile(x, y);
-                        System.out.println(TILES_LEFT_TO_OPEN);
                         if (!PLAYER_LOSES && TILES_LEFT_TO_OPEN == 0) {
                             reset.setIcon(bird_victory);
                             GRID_IS_CLICKABLE = false;
@@ -190,6 +148,7 @@ public class GameWindow extends JFrame {
     }
 
     private void gameOver() {
+        
         PLAYER_LOSES = true;
         GRID_IS_CLICKABLE = false;
         reset.setIcon(bird_fainted);
@@ -197,10 +156,8 @@ public class GameWindow extends JFrame {
         revealGameBoard();
     }
 
-    private void newGame() {
+    public void newGame() {
 
-        reset.setIcon(bird_normal);
-        
         minefield = new Minefield(GRID_SIDE);
         minematrix = minefield.getMinematrix();
 
@@ -210,14 +167,6 @@ public class GameWindow extends JFrame {
         MINE_COUNT = minefield.getAmountOfMines();
         UNUSED_EGGS = MINE_COUNT;
         TILES_LEFT_TO_OPEN = GRID_SIDE * GRID_SIDE - MINE_COUNT;
-        mine_meter.setText(Integer.toString(UNUSED_EGGS));
-
-        this.remove(game_board);
-        game_board = createGameBoard();
-        this.add("Center", game_board);
-        this.pack();
-        this.setLocationRelativeTo(null);
-
     }
 
     /**
@@ -260,7 +209,7 @@ public class GameWindow extends JFrame {
                             button_grid[x][y].setIcon(numbers[minematrix[x][y] - 1]);
                             button_grid[x][y].setDisabledIcon(numbers[minematrix[x][y] - 1]);
 
-                        } else { // was a ,mine
+                        } else { // was a mine
                             button_grid[x][y].setIcon(mine_whole);
                             button_grid[x][y].setDisabledIcon(mine_whole);
 
@@ -307,81 +256,6 @@ public class GameWindow extends JFrame {
         }
     }
 
-    /**
-     * Creates and returns the menu panel.
-     */
-    private JPanel createWindowMenuPanel() {
-
-        createMenuButtons();
-
-        JPanel menu_panel = new JPanel(new FlowLayout());
-        mine_meter = new JTextField();
-        mine_meter.setFont(new Font("Helvetica", Font.BOLD, 14));
-        mine_meter.setEditable(false);
-        mine_meter.setColumns(2);
-        mine_meter.setText(Integer.toString(UNUSED_EGGS));
-        menu_panel.add(new JLabel(mine_whole));
-        menu_panel.add(mine_meter);
-        menu_panel.add(small);
-        menu_panel.add(medium);
-        menu_panel.add(large);
-        timer = new GameTimer(menu_panel);
-        menu_panel.add(reset);
-
-        return menu_panel;
-    }
-
-    /**
-     * Creates the menu buttons.
-     */
-    private void createMenuButtons() {
-
-        reset = new JButton(bird_normal);
-        reset.setPressedIcon(bird_newgame);
-        reset.setFocusPainted(false);
-
-        small = new JButton("S");
-        small.setFocusPainted(false);
-
-        medium = new JButton("M");
-        medium.setFocusPainted(false);
-
-        large = new JButton("L");
-        large.setFocusPainted(false);
-
-        // Reset button
-        reset.addActionListener(
-                new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent tapahtuma) {
-                reset.setIcon(bird_normal);
-                timer.stop();
-                timer.reset();
-                newGame();
-            }
-        });
-        // Size buttons
-        addEventListenerForSizeButton(9, small);
-        addEventListenerForSizeButton(16, medium);
-        addEventListenerForSizeButton(22, large);
-    }
-
-    /**
-     * Sets an event listener for a size button.
-     */
-    private void addEventListenerForSizeButton(final int side, JButton size_button) {
-
-        size_button.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                timer.stop();
-                timer.reset();
-                GRID_SIDE = side;
-                newGame();
-            }
-        });
-    }
-
     private void loadIcons() {
 
         numbers = new ImageIcon[8];
@@ -395,7 +269,6 @@ public class GameWindow extends JFrame {
         numbers[7] = new ImageIcon(getClass().getResource("Icons/kahdeksan.png"));
 
         bird_normal = new ImageIcon(getClass().getResource("Icons/miinaharakka2.png"));
-        bird_newgame = new ImageIcon(getClass().getResource("Icons/miinaharakkaiik2.png"));
         bird_victory = new ImageIcon(getClass().getResource("Icons/miinaharakkajee2.png"));
         bird_clicked = new ImageIcon(getClass().getResource("Icons/miinaharakkaklik2.png"));
         bird_fainted = new ImageIcon(getClass().getResource("Icons/miinaharakkakuol2.png"));
@@ -406,5 +279,25 @@ public class GameWindow extends JFrame {
         mine_whole = new ImageIcon(getClass().getResource("Icons/miina2.png"));
         mine_explosion = new ImageIcon(getClass().getResource("Icons/rajahdys.png"));
         mine_found = new ImageIcon(getClass().getResource("Icons/miinaok2.png"));
+    }
+
+    public void setGridSide(int side) {
+        GRID_SIDE = side;
+    }
+    
+    public int getUnusedEggs() {
+        return UNUSED_EGGS;
+    }
+
+    public void setResetButtonForGameGrid(JButton reset) {
+        this.reset = reset;
+    }
+
+    public void setMineMeterForGameGrid(JTextField mine_meter) {
+        this.mine_meter = mine_meter;
+    }
+
+    public void setTimerForGameGrid(GameTimer timer) {
+        this.timer = timer;
     }
 }
